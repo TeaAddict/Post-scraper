@@ -1,9 +1,9 @@
+import { formatInputForUpdate } from "../../helper/updateHelper.js";
 import pool from "../index.js";
 
 export async function sqlGetJobs() {
   try {
     const [result, meta] = await pool.query("SELECT * FROM job");
-    console.log(result);
     return result;
   } catch (error) {
     console.log(error);
@@ -26,24 +26,24 @@ export async function sqlCreateJob(
   title: string,
   link: string,
   age: number,
-  job_website: string,
-  website_created_at: string,
+  jobWebsite: string,
+  websiteCreatedAt: string,
   promoted: boolean,
-  easy_apply: boolean,
+  easyApply: boolean,
   applied: boolean,
   location: string
 ) {
   try {
     const [result, meta] = await pool.query(
-      "INSERT INTO job (title, link, age, job_website, website_created_at, promoted, easy_apply, applied, location, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO job (title, link, age, jobWebsite, websiteCreatedAt, promoted, easyApply, applied, location, userId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [
         title,
         link,
         age,
-        job_website,
-        website_created_at,
+        jobWebsite,
+        websiteCreatedAt,
         promoted,
-        easy_apply,
+        easyApply,
         applied,
         location,
         id,
@@ -62,10 +62,10 @@ export async function sqlUpdateJob(
   title: string,
   link: string,
   age: number,
-  job_website: string,
-  website_created_at: string,
+  jobWebsite: string,
+  websiteCreatedAt: string,
   promoted: boolean,
-  easy_apply: boolean,
+  easyApply: boolean,
   applied: boolean,
   location: string
 ) {
@@ -74,30 +74,43 @@ export async function sqlUpdateJob(
       title,
       link,
       age,
-      job_website,
-      website_created_at,
+      jobWebsite,
+      websiteCreatedAt,
       promoted,
-      easy_apply,
+      easyApply,
       applied,
       location,
     };
 
-    Object.keys(data).forEach((key) => {
-      if (data[key as keyof typeof data] === undefined) {
-        delete data[key as keyof typeof data];
-      }
-    });
-
-    console.log(data);
-    const keyValue = Object.keys(data)
-      .map((key) => `${key} = ?`)
-      .join(", ");
-
-    const preparedArr = [...Object.keys(data), id];
+    const { keyValue, preparedArr } = formatInputForUpdate(id, data);
 
     await pool.query(`UPDATE job SET ${keyValue} WHERE id = ?`, preparedArr);
     const job = await sqlGetJob(id);
     return job;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function sqlDeleteJob(id: string) {
+  try {
+    const job = await sqlGetJob(id);
+    await pool.query("DELETE FROM job WHERE id = ?", [id]);
+
+    return job;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function sqlGetJobByLink(link: string) {
+  try {
+    const [result, meta] = await pool.query(
+      "SELECT * FROM job WHERE link = ?",
+      [link]
+    );
+
+    return (result as {}[])[0];
   } catch (error) {
     console.log(error);
   }

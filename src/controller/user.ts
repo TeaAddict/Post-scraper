@@ -5,6 +5,7 @@ import {
   sqlGetUser,
   sqlGetUsers,
   sqlUpdateUser,
+  sqlGetUserByUsername,
 } from "../db/user/actions.js";
 
 export async function getUsers(req: express.Request, res: express.Response) {
@@ -22,26 +23,15 @@ export async function getUser(req: express.Request, res: express.Response) {
     const { id } = req.params;
     const user = await sqlGetUser(id);
     if (!user) return res.status(400).json("User does not exist");
+
+    delete user.password;
+    delete user.salt;
+    delete user.sessionId;
+
     return res.status(200).json(user);
   } catch (error: any) {
     console.log(error);
     return res.status(400).json({ error: "Problem with getting user" });
-  }
-}
-
-export async function createUser(req: express.Request, res: express.Response) {
-  try {
-    const { username, password } = req.body;
-    if (!username || !password)
-      return res.status(400).json({ error: "All fields are required" });
-
-    const user = await sqlCreateUser(username, password);
-    if (!user) throw new Error();
-
-    return res.status(200).json(user);
-  } catch (error) {
-    console.log(error);
-    return res.status(400).json({ error: "Problem with creating user" });
   }
 }
 
@@ -54,7 +44,7 @@ export async function updateUser(req: express.Request, res: express.Response) {
     if (!exists)
       return res.status(400).json({ message: "User does not exist" });
 
-    const result = await sqlUpdateUser(id, username, password);
+    const result = await sqlUpdateUser(id, { username, password });
     if (!result) throw new Error("Problem updating user in db");
 
     return res.status(201).json(result);
