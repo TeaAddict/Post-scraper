@@ -1,0 +1,12 @@
+
+
+
+TODO:
+1. hash password
+2. middlewares:
+    1. auth
+    2. cors?
+    3. compression?
+    +4. body parser json
+
+3. FIX: Returns sensitive info to client
