@@ -1,6 +1,6 @@
-// import express from "express";
-// import { scrapeJobs } from "../controller/scrape.js";
+import express from "express";
+import { getPosts } from "../controller/scrape.js";
 
-// export default (router: express.Router) => {
-//   router.get("/scrape", scrapeJobs);
-// };
+export default (router: express.Router) => {
+  router.get("/scrape", getPosts);
+};

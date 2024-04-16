@@ -37,35 +37,14 @@ export async function getJob(req: express.Request, res: express.Response) {
 export async function createJob(req: express.Request, res: express.Response) {
   try {
     const { id } = req.params;
-    const {
-      title,
-      link,
-      age,
-      jobWebsite,
-      websiteCreatedAt,
-      promoted,
-      easyApply,
-      applied,
-      location,
-    } = req.body;
-    if (!title || !link || !age || !jobWebsite || !websiteCreatedAt)
+    const { title, link, ageInDays, companyName, keyword } = req.body;
+    if (!title || !link || !ageInDays || !companyName || !keyword)
       return res.status(400).json({ error: "Missing required fields" });
 
     const job = await sqlGetJobByLink(link);
     if (job) return res.status(400).json({ error: "Job already exists" });
 
-    const resultJob = await sqlCreateJob(
-      id,
-      title,
-      link,
-      age,
-      jobWebsite,
-      websiteCreatedAt,
-      promoted,
-      easyApply,
-      applied,
-      location
-    );
+    const resultJob = await sqlCreateJob(id, req.body);
     if (!resultJob)
       return res.status(400).json({ error: "Problem with creating job" });
 
@@ -79,30 +58,8 @@ export async function createJob(req: express.Request, res: express.Response) {
 export async function updateJob(req: express.Request, res: express.Response) {
   try {
     const { id } = req.params;
-    const {
-      title,
-      link,
-      age,
-      jobWebsite,
-      websiteCreatedAt,
-      promoted,
-      easyApply,
-      applied,
-      location,
-    } = req.body;
 
-    const job = await sqlUpdateJob(
-      id,
-      title,
-      link,
-      age,
-      jobWebsite,
-      websiteCreatedAt,
-      promoted,
-      easyApply,
-      applied,
-      location
-    );
+    const job = await sqlUpdateJob(id, req.body);
     if (!job)
       return res.status(400).json({ error: "Problem with updating job" });
 

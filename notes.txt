@@ -2,11 +2,17 @@
 
 
 TODO:
-1. hash password
++1. hash password
 2. middlewares:
-    1. auth
+    +1. auth
     2. cors?
     3. compression?
     +4. body parser json
 
-3. FIX: Returns sensitive info to client
++3. FIX: Returns sensitive info to client
+
+
+
+Scraping link:
+1. if return: []    Might mean site just didnt send html FOR SOME REASON IDK WHY = code could have been fine.
+    429 Too Many Requests???    maybe because I am not logged in?

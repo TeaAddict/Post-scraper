@@ -1,37 +1,46 @@
-import puppeteer from "puppeteer-extra";
-import StealthPlugin from "puppeteer-extra-plugin-stealth";
-import { getIp } from "../helper/helpers";
+import { BLACKLISTED_KEYWORDS, MAX_AGE, TEST_DATA } from "../contants";
+import express from "express";
 
-const website_url = "https://www.scrapethissite.com/pages";
+export type Post = {
+  title: string;
+  link: string;
+  location: string;
+  companyName: string;
+  websiteCreatedAtDateTime: string;
+  websiteCreatedAtString: string;
+  ageInDays: number;
+  keywords: string;
+};
 
-export async function getJobs() {
-  console.log("====================================");
-  const currentIp = await getIp();
-  if (currentIp === process.env.MY_IP) return console.log("Hide ip!");
+function filter(posts: Post[], filterWordList: string[]) {
+  return posts.filter(
+    (post) =>
+      !(
+        filterWordList.some((word) =>
+          post.title.toLowerCase().includes(word)
+        ) || post.ageInDays > MAX_AGE
+      )
+  );
+}
 
-  const browser = await puppeteer
-    .use(StealthPlugin())
-    .launch({ headless: true });
+export async function getPosts(req: express.Request, res: express.Response) {
+  try {
+    // const unfilteredJobs = await getLinkedinPosts("next js", "Lithuania");
+    // console.log(unfilteredJobs);
+    const cleanPosts = filter(TEST_DATA, BLACKLISTED_KEYWORDS);
+    console.log(cleanPosts);
+    return res.status(200).json(cleanPosts);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ error: "Problem with getting posts" });
+  }
+}
 
-  const page = await browser.newPage();
-  await page.goto(website_url);
-
-  //   const pageData = await page.evaluate((website_url) => {
-  //     const posts = Array.from(document.querySelectorAll(".page"));
-  //     const data = posts.map((post) => ({
-  //       title: post.querySelector("h3 a")?.textContent,
-  //     }));
-  //     return data;
-  //   }, website_url);
-  //   console.log(pageData);
-  const data2 = await page.evaluate((website_url) => {
-    const posts = Array.from(document.querySelectorAll("div .page"));
-    const data = posts.map((post) => ({
-      content: post.querySelector("h3")?.textContent,
-    }));
-    return data;
-  }, website_url);
-  console.log(data2);
-
-  await browser.close();
+export async function savePosts(req: express.Request, res: express.Response) {
+  try {
+    return res.status(200).json({ msg: "All good" });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ error: "Problem with saving posts" });
+  }
 }

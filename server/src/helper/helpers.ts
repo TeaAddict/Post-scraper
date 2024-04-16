@@ -7,3 +7,11 @@ export async function getIp(): Promise<string> {
     res.json().then((body) => body.ip)
   );
 }
+
+export function getAgeInDays(date: string) {
+  const date1 = new Date(date).getTime();
+  const date2 = new Date().getTime();
+  const diffTime = Math.abs(date2 - date1);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays;
+}
