@@ -4,7 +4,7 @@ import { createJob } from "./job";
 import { sqlCreateJob, sqlGetJobByLink } from "../db/job/actions";
 import { Post } from "../Types/postTypes";
 
-function filter(posts: Post[], filterWordList: string[]) {
+function filterByTitle(posts: Post[], filterWordList: string[]) {
   return posts.filter(
     (post) =>
       !(
@@ -21,20 +21,16 @@ export async function getPosts(req: express.Request, res: express.Response) {
 
     // const unfilteredJobs = await getLinkedinPosts("next js", "Lithuania");
     // console.log(unfilteredJobs);
-    const cleanPosts = filter(TEST_DATA, BLACKLISTED_KEYWORDS);
+    const cleanPosts = filterByTitle(TEST_DATA, BLACKLISTED_KEYWORDS);
 
     cleanPosts.forEach(async (post) => {
-      // createJob(req, res);
       const res = await sqlGetJobByLink(post.link);
       if (res) return;
-      const fullPost: Post = {
-        ...post,
-        applied: false,
-      };
-      sqlCreateJob(id, fullPost);
+
+      sqlCreateJob(id, post);
     });
 
-    console.log(cleanPosts);
+    // console.log(cleanPosts);
     return res.status(200).json(cleanPosts);
   } catch (error) {
     console.log(error);

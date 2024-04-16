@@ -28,9 +28,9 @@ export async function sqlCreateJob(id: string, post: Post) {
     const preparedPlaceholder = Array(propertyCount + 1)
       .fill("?")
       .join(", ");
-    const queryString = `INSERT INTO job (title, link, ageInDays, companyName, location, applied, websiteCreatedAtDateTime, websiteCreatedAtString, keywords, userId) VALUES (${preparedPlaceholder})`;
+    const columns = [...Object.keys(post), "userId"];
+    const queryString = `INSERT INTO job (${columns}) VALUES (${preparedPlaceholder})`;
     const preparedValues = [...Object.values(post), id];
-
     const [result, meta] = await pool.query(queryString, preparedValues);
     const insertId = (result as { insertId: number }).insertId;
     const job = await sqlGetJob(insertId.toString());
