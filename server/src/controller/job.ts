@@ -37,8 +37,8 @@ export async function getJob(req: express.Request, res: express.Response) {
 export async function createJob(req: express.Request, res: express.Response) {
   try {
     const { id } = req.params;
-    const { title, link, ageInDays, companyName, keyword } = req.body;
-    if (!title || !link || !ageInDays || !companyName || !keyword)
+    const { title, link, ageInDays, companyName, keywords } = req.body;
+    if (!title || !link || !ageInDays || !companyName || !keywords)
       return res.status(400).json({ error: "Missing required fields" });
 
     const job = await sqlGetJobByLink(link);

@@ -6,8 +6,6 @@ CREATE TABLE job (
     companyName VARCHAR(255) NOT NULL,
     location VARCHAR(255),
     applied BOOLEAN NOT NULL DEFAULT 0,
-    easyApply BOOLEAN NOT NULL DEFAULT 0,
-    promoted BOOLEAN NOT NULL DEFAULT 0,
     websiteCreatedAtDateTime VARCHAR(255) NOT NULL,
     websiteCreatedAtString VARCHAR(255) NOT NULL,
     keywords VARCHAR(255) NOT NULL,

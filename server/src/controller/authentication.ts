@@ -22,6 +22,7 @@ export async function login(req: express.Request, res: express.Response) {
 
     const sessionId = random();
     res.cookie("USER-AUTH", sessionId);
+    res.cookie("id", user.id);
     sqlUpdateUser(user.id.toString(), { sessionId });
 
     return res.status(200).json({ message: "Logged in successfully!" });
@@ -48,6 +49,7 @@ export async function register(req: express.Request, res: express.Response) {
 
     const sessionId = random();
     res.cookie("USER-AUTH", sessionId);
+    res.cookie("id", user.id);
     sqlUpdateUser(user.id.toString(), { sessionId });
 
     return res.status(200).json(user);

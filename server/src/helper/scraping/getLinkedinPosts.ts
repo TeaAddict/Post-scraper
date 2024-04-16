@@ -56,6 +56,7 @@ export async function getLinkedinPosts(
             ?.textContent?.trim(),
           ageInDays: 0,
           keywords: keywords,
+          applied: false,
         };
       });
 

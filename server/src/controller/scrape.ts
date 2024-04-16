@@ -1,16 +1,8 @@
 import { BLACKLISTED_KEYWORDS, MAX_AGE, TEST_DATA } from "../contants";
 import express from "express";
-
-export type Post = {
-  title: string;
-  link: string;
-  location: string;
-  companyName: string;
-  websiteCreatedAtDateTime: string;
-  websiteCreatedAtString: string;
-  ageInDays: number;
-  keywords: string;
-};
+import { createJob } from "./job";
+import { sqlCreateJob, sqlGetJobByLink } from "../db/job/actions";
+import { Post } from "../Types/postTypes";
 
 function filter(posts: Post[], filterWordList: string[]) {
   return posts.filter(
@@ -25,9 +17,23 @@ function filter(posts: Post[], filterWordList: string[]) {
 
 export async function getPosts(req: express.Request, res: express.Response) {
   try {
+    const { id } = req.cookies;
+
     // const unfilteredJobs = await getLinkedinPosts("next js", "Lithuania");
     // console.log(unfilteredJobs);
     const cleanPosts = filter(TEST_DATA, BLACKLISTED_KEYWORDS);
+
+    cleanPosts.forEach(async (post) => {
+      // createJob(req, res);
+      const res = await sqlGetJobByLink(post.link);
+      if (res) return;
+      const fullPost: Post = {
+        ...post,
+        applied: false,
+      };
+      sqlCreateJob(id, fullPost);
+    });
+
     console.log(cleanPosts);
     return res.status(200).json(cleanPosts);
   } catch (error) {

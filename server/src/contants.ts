@@ -11,6 +11,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "2 months ago",
     ageInDays: 75,
     keywords: "node js",
+    applied: false,
   },
   {
     title: "Frontend Developer",
@@ -21,6 +22,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "1 week ago",
     ageInDays: 8,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "Fullstack Developer",
@@ -31,6 +33,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "2 weeks ago",
     ageInDays: 21,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "Mid-Senior Front-End Engineer (WEB team)",
@@ -41,6 +44,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "1 week ago",
     ageInDays: 13,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "Mid-Senior Front-end Engineer",
@@ -51,6 +55,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "2 weeks ago",
     ageInDays: 21,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "Mid-Senior Front-End Engineer (WEB team)",
@@ -61,6 +66,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "1 week ago",
     ageInDays: 13,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "Full-Stack Developer",
@@ -71,6 +77,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "4 days ago",
     ageInDays: 5,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "Senior Frontend Developer",
@@ -81,6 +88,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "2 weeks ago",
     ageInDays: 18,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "Senior Software Engineer  (Remote or Hybrid)",
@@ -91,6 +99,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "1 week ago",
     ageInDays: 14,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "FuturePros Programme: IT and Software Engineering Track",
@@ -101,6 +110,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "2 days ago",
     ageInDays: 4,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "Javascript Developer",
@@ -111,6 +121,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "1 month ago",
     ageInDays: 33,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "(Senior) Data Scientists - based in Luxembourg",
@@ -121,6 +132,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "3 weeks ago",
     ageInDays: 28,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "FACT Team Offshore Developers",
@@ -131,6 +143,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "4 weeks ago",
     ageInDays: 30,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "FACT Team Offshore Developers",
@@ -141,6 +154,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "4 weeks ago",
     ageInDays: 30,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "Middle Full-Stack Developer",
@@ -151,6 +165,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "2 months ago",
     ageInDays: 71,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "FACT Team Offshore Developers",
@@ -161,6 +176,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "4 weeks ago",
     ageInDays: 30,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "Software Engineer",
@@ -171,6 +187,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "2 weeks ago",
     ageInDays: 19,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "FULL STACK .NET DEVELOPER",
@@ -181,6 +198,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "3 weeks ago",
     ageInDays: 28,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "Senior Full-Stack Developer",
@@ -191,6 +209,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "1 month ago",
     ageInDays: 36,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "Senior Frontend Web Engineer",
@@ -201,6 +220,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "2 weeks ago",
     ageInDays: 18,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "Middle/Senior React Front-End Developer (On-Site in Vilnius)",
@@ -211,6 +231,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "2 weeks ago",
     ageInDays: 19,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "Senior Web Developer - Workplace Engineering",
@@ -221,6 +242,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "9 months ago",
     ageInDays: 294,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "Senior Software Engineer - iTwin Applications",
@@ -231,6 +253,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "2 weeks ago",
     ageInDays: 20,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "Atlassian Jira & Confluence DevOps Engineer",
@@ -241,6 +264,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "1 month ago",
     ageInDays: 33,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "Senior FrontEnd Developer",
@@ -251,6 +275,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "1 week ago",
     ageInDays: 14,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "Full-stack Engineer (AWS, Java)",
@@ -261,6 +286,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "3 weeks ago",
     ageInDays: 28,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "Senior Software Engineer",
@@ -271,6 +297,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "1 month ago",
     ageInDays: 39,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "WooCommerce Senior Developer",
@@ -281,6 +308,7 @@ export const TEST_DATA = [
     websiteCreatedAtString: "5 days ago",
     ageInDays: 6,
     keywords: "javascript",
+    applied: false,
   },
   {
     title: "Lead DevOps Engineer",
@@ -291,5 +319,6 @@ export const TEST_DATA = [
     websiteCreatedAtString: "3 weeks ago",
     ageInDays: 27,
     keywords: "javascript",
+    applied: false,
   },
 ];
