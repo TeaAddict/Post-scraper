@@ -1,7 +1,7 @@
-import { Job } from "../../controller/scrape";
+import { Post } from "../../Types/postTypes";
 
 export function filterPostsByKeywords(
-  posts: Job[],
+  posts: Post[],
   blackListedKeywords: string[]
 ) {
   const filtered = posts

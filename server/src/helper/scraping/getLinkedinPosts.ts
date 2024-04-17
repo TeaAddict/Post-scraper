@@ -31,37 +31,48 @@ export async function getLinkedinPosts(
     const page = await browser.newPage();
     await page.goto(cleanUrl);
 
-    const jobPosts = await page.evaluate((cleanUrl) => {
-      const posts = Array.from(
-        document.querySelectorAll("div.job-search-card")
-      );
-      const res = posts.map((val) => {
-        const innerDiv = val.querySelector("div.base-search-card__info");
-        return {
-          title: val
-            .querySelector("div.base-search-card__info h3")
-            ?.textContent?.trim(),
-          link: val
-            .querySelector("a.base-card__full-link")
-            ?.getAttribute("href"),
-          location: innerDiv
-            ?.querySelector("div.base-search-card__metadata span")
-            ?.textContent?.trim(),
-          companyName: innerDiv?.querySelector("h4 a")?.textContent?.trim(),
-          websiteCreatedAtDateTime: innerDiv
-            ?.querySelector("div.base-search-card__metadata time")
-            ?.getAttribute("datetime"),
-          websiteCreatedAtString: innerDiv
-            ?.querySelector("div.base-search-card__metadata time")
-            ?.textContent?.trim(),
-          ageInDays: 0,
-          keywords: keywords,
-          applied: false,
-        };
-      });
+    const jobPosts = await page.evaluate(
+      (cleanUrl, keywords) => {
+        const posts = Array.from(
+          document.querySelectorAll("div.job-search-card")
+        );
+        const res = posts.map((val) => {
+          const innerDiv = val.querySelector("div.base-search-card__info");
+          return {
+            title:
+              val
+                .querySelector("div.base-search-card__info h3")
+                ?.textContent?.trim() ?? "",
+            link:
+              val
+                .querySelector("a.base-card__full-link")
+                ?.getAttribute("href") ?? "",
+            location:
+              innerDiv
+                ?.querySelector("div.base-search-card__metadata span")
+                ?.textContent?.trim() ?? "",
+            companyName:
+              innerDiv?.querySelector("h4 a")?.textContent?.trim() ?? "",
+            websiteCreatedAtDateTime:
+              innerDiv
+                ?.querySelector("div.base-search-card__metadata time")
+                ?.getAttribute("datetime") ?? "",
+            websiteCreatedAtString:
+              innerDiv
+                ?.querySelector("div.base-search-card__metadata time")
+                ?.textContent?.trim() ?? "",
+            ageInDays: 0,
+            keywords,
+            applied: false,
+            blacklisted: false,
+          };
+        });
 
-      return res;
-    }, cleanUrl);
+        return res;
+      },
+      cleanUrl,
+      keywords
+    );
     if (!jobPosts.length) {
       console.log("Empty arr, send request again in 5 seconds");
     }
@@ -77,3 +88,7 @@ export async function getLinkedinPosts(
     console.log(error);
   }
 }
+
+// Errors I am getting when fetching data:
+// 1. "Error: Execution context was destroyed, most likely because of a navigation."       (throws error, should probably compare message and retry)
+// 2. []                                       (empty array, probably because got redirected to login page)

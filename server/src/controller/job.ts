@@ -12,7 +12,21 @@ export async function getJobs(req: express.Request, res: express.Response) {
   try {
     const jobs = await sqlGetJobs();
     if (!jobs) throw new Error("Problem with getting jobs");
-    return res.status(200).json(jobs);
+
+    const formatted = jobs.map((post) => ({
+      title: post.title,
+      link: post.link,
+      location: post.location,
+      companyName: post.companyName,
+      websiteCreatedAtDateTime: post.websiteCreatedAtDateTime,
+      websiteCreatedAtString: post.websiteCreatedAtString,
+      ageInDays: post.ageInDays,
+      keywords: post.keywords,
+      applied: post.applied,
+      blacklisted: post.blacklisted,
+    }));
+
+    return res.status(200).json(formatted);
   } catch (error) {
     console.log(error);
     return res.status(400).json({ error: "Problem with getting jobs" });

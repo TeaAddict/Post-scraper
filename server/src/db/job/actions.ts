@@ -1,11 +1,11 @@
 import { formatInputForUpdate } from "../../helper/updateHelper.js";
-import { Post } from "../../Types/postTypes.js";
+import { DbPost, Post } from "../../Types/postTypes.js";
 import pool from "../index.js";
 
 export async function sqlGetJobs() {
   try {
     const [result, meta] = await pool.query("SELECT * FROM job");
-    return result;
+    return result as unknown as DbPost[];
   } catch (error) {
     console.log(error);
   }

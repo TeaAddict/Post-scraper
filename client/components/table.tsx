@@ -98,7 +98,7 @@ const Table = ({ head, body, onClickHead, onClickBody, initSort }: Props) => {
             </thead>
             <tbody>
               {body.map((row, index) => (
-                <tr key={index} className={`border-t `} onClick={onClickBody}>
+                <tr key={index} className={`border-t`} onClick={onClickBody}>
                   {head.map((el, index) => (
                     <td className="px-6 py-4" key={index}>
                       {row[el.value]}

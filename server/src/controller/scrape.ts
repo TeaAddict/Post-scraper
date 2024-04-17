@@ -1,8 +1,9 @@
-import { BLACKLISTED_KEYWORDS, MAX_AGE, TEST_DATA } from "../contants";
+import { BLACKLISTED_KEYWORDS, MAX_AGE, UNFILTERED_DATA } from "../contants";
 import express from "express";
 import { createJob } from "./job";
 import { sqlCreateJob, sqlGetJobByLink } from "../db/job/actions";
 import { Post } from "../Types/postTypes";
+import { getLinkedinPosts } from "../helper/scraping/getLinkedinPosts";
 
 function filterByTitle(posts: Post[], filterWordList: string[]) {
   return posts.filter(
@@ -20,8 +21,12 @@ export async function getPosts(req: express.Request, res: express.Response) {
     const { id } = req.cookies;
 
     // const unfilteredJobs = await getLinkedinPosts("next js", "Lithuania");
-    // console.log(unfilteredJobs);
-    const cleanPosts = filterByTitle(TEST_DATA, BLACKLISTED_KEYWORDS);
+    // if (!unfilteredJobs)
+    //   return res.status(400).json({ error: "Problem with scraper" });
+
+    const unfilteredJobs = UNFILTERED_DATA; // TODO: remove later
+
+    const cleanPosts = filterByTitle(unfilteredJobs, BLACKLISTED_KEYWORDS);
 
     cleanPosts.forEach(async (post) => {
       const res = await sqlGetJobByLink(post.link);
