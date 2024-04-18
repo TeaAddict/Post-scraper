@@ -4,7 +4,7 @@ import { TEST_DATA } from "../constants";
 
 const MainPage = () => {
   return (
-    <main className="flex justify-center items-center min-h-screen">
+    <main className="flex justify-center items-center min-h-screen bg-background text-foreground overflow-auto max-w-full">
       <ClientPage data={TEST_DATA} />
     </main>
   );

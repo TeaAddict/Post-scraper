@@ -20,8 +20,8 @@ export const TEST_DATA = [
     websiteCreatedAtString: "5 hours ago",
     ageInDays: "1",
     keywords: "next js",
-    applied: 0,
-    blacklisted: 0,
+    applied: 1,
+    blacklisted: 1,
   },
   {
     title: "Full-Stack Developer",

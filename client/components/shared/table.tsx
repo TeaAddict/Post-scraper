@@ -27,12 +27,11 @@ import {
 type Body = { [key: string]: any }[];
 
 type Props = {
-  head: { label: string; value: string }[];
+  head: { label: string; value: string; func?: Function }[];
   body: { [key: string]: any }[];
   onClickHead?: Function;
   onClickBody?: MouseEventHandler<HTMLTableRowElement>;
   initSort?: [{ name: string; value: string }];
-  hoverColor?: string;
 };
 
 function ascDesc(
@@ -77,46 +76,47 @@ const Table = ({ head, body, onClickHead, onClickBody, initSort }: Props) => {
   }
 
   return (
-    <main>
-      <ScrollArea className="pb-5" type="always">
-        <ScrollAreaViewport className="max-h-[70vh] w-full h-full">
-          <table className="text-left w-full text-sm">
-            <thead className="uppercase">
-              <tr className="border-b-4">
-                {head.map((el) => (
-                  <th
-                    className={`px-6 py-3 ${
-                      onClickHead && "hover:bg-gray-200 cursor-pointer"
-                    }`}
-                    onClick={() => handleHead(el.value)}
-                    key={el.value}
-                  >
-                    {el.label}
-                  </th>
+    <ScrollArea className="pb-5 max-w-[70vw]" type="always">
+      <ScrollAreaViewport className="max-h-[70vh] w-full">
+        <table className="text-left text-sm w-96">
+          <thead className="uppercase">
+            <tr className="border-b-4 border-current">
+              {head.map((el) => (
+                <th
+                  className={`px-6 py-3 hover:bg-white/10 transition-all duration-300 cursor-pointer`}
+                  onClick={() => handleHead(el.value)}
+                  key={el.value}
+                >
+                  {el.value === "empty" ? "" : el.label}
+                </th>
+              ))}
+            </tr>
+          </thead>
+
+          <tbody>
+            {body.map((row, index) => (
+              <tr
+                key={index}
+                className={`border-t border-current`}
+                onClick={onClickBody}
+              >
+                {head.map((el, index) => (
+                  <td className="px-6 py-4" key={index}>
+                    {el.func ? el.func(row[el.value], row) : row[el.value]}
+                  </td>
                 ))}
               </tr>
-            </thead>
-            <tbody>
-              {body.map((row, index) => (
-                <tr key={index} className={`border-t`} onClick={onClickBody}>
-                  {head.map((el, index) => (
-                    <td className="px-6 py-4" key={index}>
-                      {row[el.value]}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </ScrollAreaViewport>
+            ))}
+          </tbody>
+        </table>
         <ScrollAreaScrollbar orientation="vertical">
           <ScrollAreaThumb className="border-2 rounded-md" />
         </ScrollAreaScrollbar>
         <ScrollAreaScrollbar orientation="horizontal">
           <ScrollAreaThumb className="border-2 rounded-md" />
         </ScrollAreaScrollbar>
-      </ScrollArea>
-    </main>
+      </ScrollAreaViewport>
+    </ScrollArea>
   );
 };
 

@@ -3,15 +3,14 @@ import { databaseExists } from "./databaseExists.js";
 import { createDb } from "./createDb.js";
 import { getMissingTables } from "./getMissingTables.js";
 import { createTables } from "./createTables.js";
-
-const tableList = ["user", "job"];
+import { TABLE_LIST } from "../contants.js";
 
 async function createPool() {
   try {
     const database = await databaseExists();
     if (!database) createDb();
 
-    const missingTables = await getMissingTables(tableList);
+    const missingTables = await getMissingTables(TABLE_LIST);
     if (missingTables) createTables(missingTables);
 
     const pool = mysql2.createPool({
