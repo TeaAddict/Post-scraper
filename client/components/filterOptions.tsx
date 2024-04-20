@@ -4,8 +4,10 @@ import { CheckboxWLabel } from "./shared/checkboxWLabel";
 const FilterOptions = () => {
   return (
     <div className="flex gap-4">
-      <CheckboxWLabel id="appliedCheckbox">Filter applied</CheckboxWLabel>
-      <CheckboxWLabel id="blacklistedCheckbox">
+      <CheckboxWLabel id="appliedCheckbox" defaultChecked={false}>
+        Filter applied
+      </CheckboxWLabel>
+      <CheckboxWLabel id="blacklistedCheckbox" defaultChecked={true}>
         Filter blacklisted
       </CheckboxWLabel>
     </div>

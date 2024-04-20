@@ -76,9 +76,9 @@ const Table = ({ head, body, onClickHead, onClickBody, initSort }: Props) => {
   }
 
   return (
-    <ScrollArea className="pb-5 max-w-[70vw]" type="always">
-      <ScrollAreaViewport className="max-h-[70vh] w-full">
-        <table className="text-left text-sm w-96">
+    <ScrollArea className="pb-5 w-full h-full overflow-auto" type="always">
+      <ScrollAreaViewport className="w-full h-full">
+        <table className="text-left text-base">
           <thead className="uppercase">
             <tr className="border-b-4 border-current">
               {head.map((el) => (

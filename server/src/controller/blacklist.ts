@@ -44,6 +44,7 @@ export async function addToBlacklist(
 ) {
   try {
     const { keyword } = req.body;
+    console.log("GOT:", keyword);
     if (!keyword)
       return res
         .status(400)

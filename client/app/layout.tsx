@@ -20,7 +20,12 @@ export default function RootLayout({
     <html lang="en">
       <ReduxProvider>
         <TanstackProvider>
-          <body className={inter.className}>{children}</body>
+          <body
+            // className={`${inter.className} p-20 bg-background text-foreground w-screen h-screen`}
+            className={`${inter.className}`}
+          >
+            {children}
+          </body>
         </TanstackProvider>
       </ReduxProvider>
     </html>

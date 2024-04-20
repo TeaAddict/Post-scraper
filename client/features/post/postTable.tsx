@@ -1,9 +1,9 @@
 import React from "react";
-import Table from "./shared/table";
+import Table from "../../components/shared/table";
 import Link from "next/link";
 import { Post } from "@/utils/types/postTypes";
-import Button from "./shared/button";
-import { Checkbox } from "./ui/checkbox";
+import Button from "../../components/shared/button";
+import { Checkbox } from "../../components/ui/checkbox";
 
 function checkBox(value: string | boolean | number, rowData: Post) {
   const boolVal = value === 1;
@@ -44,7 +44,7 @@ const PostTable = ({ data }: { data: Post[] }) => {
     { label: "keywords", value: "keywords" },
   ];
   return (
-    <div>
+    <div className="w-full h-full">
       <Table head={header} body={data} onClickHead={onHeadClick} />
     </div>
   );
