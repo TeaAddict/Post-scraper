@@ -17,12 +17,13 @@ const LoginForm = () => {
   const router = useRouter();
   const {
     register,
+    reset,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useForm({
     defaultValues: {
-      username: "",
-      password: "",
+      username: "jonas1",
+      password: "jonas1",
     },
   });
   const isLoading = isSubmitting;
@@ -32,7 +33,8 @@ const LoginForm = () => {
       { username, password },
       {
         onSuccess() {
-          router.push("/");
+          router.push("/post");
+          reset();
         },
       }
     );

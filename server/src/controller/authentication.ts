@@ -1,6 +1,7 @@
 import express from "express";
 import {
   sqlCreateUser,
+  sqlGetUserBySessionToken,
   sqlGetUserByUsername,
   sqlUpdateUser,
 } from "../db/user/actions.js";
@@ -20,10 +21,10 @@ export async function login(req: express.Request, res: express.Response) {
     if (hashedPass !== user.password)
       return res.status(403).json({ error: "Wrong username or password" });
 
-    const sessionId = random();
-    res.cookie("USER-AUTH", sessionId);
+    const sessionToken = random();
+    res.cookie("USER-AUTH", sessionToken, { maxAge: 60000000 });
     res.cookie("id", user.id);
-    sqlUpdateUser(user.id.toString(), { sessionId });
+    sqlUpdateUser(user.id.toString(), { sessionToken });
 
     return res.status(200).json({ message: "Logged in successfully!" });
   } catch (error) {
@@ -47,14 +48,35 @@ export async function register(req: express.Request, res: express.Response) {
     if (!user)
       return res.status(400).json({ error: "Problem with registration" });
 
-    const sessionId = random();
-    res.cookie("USER-AUTH", sessionId);
+    const sessionToken = random();
+    res.cookie("USER-AUTH", sessionToken);
     res.cookie("id", user.id);
-    sqlUpdateUser(user.id.toString(), { sessionId });
+    sqlUpdateUser(user.id.toString(), { sessionToken });
 
     return res.status(200).json(user);
   } catch (error) {
     console.log(error);
     return res.status(400).json({ error: "Problem with registration" });
+  }
+}
+
+export async function validateToken(
+  req: express.Request,
+  res: express.Response
+) {
+  try {
+    const { cookies } = req;
+    const sessionToken = cookies["USER-AUTH"];
+
+    if (!sessionToken)
+      return res.status(400).json({ error: "Session token is missing" });
+
+    const user = await sqlGetUserBySessionToken(sessionToken);
+    if (!user) return res.status(401).json({ error: "User is unauthorized" });
+
+    return res.status(200).json({ message: "User is authorized" });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ error: "Problem with token validation" });
   }
 }

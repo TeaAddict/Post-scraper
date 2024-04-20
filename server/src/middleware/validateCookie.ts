@@ -1,5 +1,5 @@
 import express from "express";
-import { sqlGetUserBySessionId } from "../db/user/actions.js";
+import { sqlGetUserBySessionToken } from "../db/user/actions.js";
 
 export async function validateCookie(
   req: express.Request,
@@ -10,7 +10,7 @@ export async function validateCookie(
     const { cookies } = req;
     if (!cookies["USER-AUTH"]) return res.status(403).json("Unauthorized");
 
-    const user = await sqlGetUserBySessionId(cookies["USER-AUTH"]);
+    const user = await sqlGetUserBySessionToken(cookies["USER-AUTH"]);
     if (!user) return res.status(403).json("Unauthorized");
     next();
   } catch (error) {

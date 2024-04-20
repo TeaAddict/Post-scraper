@@ -6,7 +6,7 @@ export type User = {
   username: string;
   password: string | undefined;
   salt: string | undefined;
-  sessionId: string | undefined;
+  sessionToken: string | undefined;
   created_at: string;
   updated_at: string;
 };
@@ -39,7 +39,7 @@ export async function sqlUpdateUser(
   data: {
     username?: string;
     password?: string;
-    sessionId?: string;
+    sessionToken?: string;
   }
 ) {
   try {
@@ -70,7 +70,7 @@ export async function sqlCreateUser(
     const user = await sqlGetUser(insert_id.toString());
     delete user?.password;
     delete user?.salt;
-    delete user?.sessionId;
+    delete user?.sessionToken;
     return user;
   } catch (error) {
     console.log(error);
@@ -101,11 +101,11 @@ export async function sqlGetUserByUsername(username: string) {
   }
 }
 
-export async function sqlGetUserBySessionId(sessionId: string) {
+export async function sqlGetUserBySessionToken(sessionToken: string) {
   try {
     const [result, meta] = await pool.query(
-      "SELECT * FROM user WHERE sessionId = ?",
-      sessionId
+      "SELECT * FROM user WHERE sessionToken = ?",
+      sessionToken
     );
 
     return (result as {}[])[0];

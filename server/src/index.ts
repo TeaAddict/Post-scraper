@@ -14,7 +14,12 @@ server.listen(process.env.PORT, () => {
   console.log(`Server running on: http://localhost:${process.env.PORT}`);
 });
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    credentials: true,
+  })
+);
 app.use(cookieParser());
 app.use(bodyParser.json());
 

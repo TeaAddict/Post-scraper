@@ -17,6 +17,7 @@ const RegisterForm = () => {
   const router = useRouter();
   const {
     register,
+    reset,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useForm({
@@ -35,6 +36,7 @@ const RegisterForm = () => {
         onSuccess() {
           console.log("Successfully registered!");
           router.push("/");
+          reset();
         },
       }
     );

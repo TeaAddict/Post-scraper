@@ -1,11 +1,9 @@
 import express from "express";
 import {
-  sqlCreateUser,
   sqlDeleteUser,
   sqlGetUser,
   sqlGetUsers,
   sqlUpdateUser,
-  sqlGetUserByUsername,
 } from "../db/user/actions.js";
 
 export async function getUsers(req: express.Request, res: express.Response) {
@@ -26,7 +24,7 @@ export async function getUser(req: express.Request, res: express.Response) {
 
     delete user.password;
     delete user.salt;
-    delete user.sessionId;
+    delete user.sessionToken;
 
     return res.status(200).json(user);
   } catch (error: any) {
