@@ -14,7 +14,6 @@ const FilterOptions = () => {
 
   function onClick(id: string, isChecked: boolean) {
     let settings = { [id]: isChecked };
-
     settingsMutation.mutate(settings);
   }
 

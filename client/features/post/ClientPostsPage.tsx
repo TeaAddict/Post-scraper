@@ -9,8 +9,11 @@ import BlacklistedWordTable from "../../components/blacklistedWordTable";
 const ClientPostsPage = ({ data }: { data: Post[] }) => {
   const [searchVal, setSearchVal] = useState("");
 
+  const filteredDataByKeyword = data.filter((post) => {
+    if (!searchVal || post.keywords.includes(searchVal)) return post;
+  });
+
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
-    console.log(e.currentTarget.value);
     setSearchVal(e.currentTarget.value);
   }
 
@@ -20,7 +23,7 @@ const ClientPostsPage = ({ data }: { data: Post[] }) => {
         <PostSearchBar value={searchVal} onChange={onChange} />
         <FilterOptions />
         <div className="w-full h-full">
-          <PostTable data={data} />
+          <PostTable data={filteredDataByKeyword} />
         </div>
       </div>
       <BlacklistedWordTable />
