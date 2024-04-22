@@ -9,11 +9,7 @@ function checkBox(value: string | boolean | number, rowData: Post) {
   const boolVal = value === 1;
   return (
     <div className="flex justify-center">
-      <Checkbox
-        id={rowData.link}
-        defaultChecked={boolVal}
-        className="w-6 h-6"
-      />
+      <Checkbox id={rowData.link} className="w-6 h-6" checked={boolVal} />
     </div>
   );
 }
@@ -32,9 +28,9 @@ function onHeadClick() {
 
 const PostTable = ({ data }: { data: Post[] }) => {
   const header = [
-    { label: "applied", value: "applied", func: checkBox },
-    { label: "blacklisted", value: "blacklisted", func: checkBox },
-    { label: "link", value: "link", func: button },
+    { label: "applied", value: "applied", bodyFunc: checkBox },
+    { label: "blacklisted", value: "blacklisted", bodyFunc: checkBox },
+    { label: "link", value: "link", bodyFunc: button },
     { label: "title", value: "title" },
     { label: "location", value: "location" },
     { label: "company Name", value: "companyName" },

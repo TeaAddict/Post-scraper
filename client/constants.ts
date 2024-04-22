@@ -19,7 +19,7 @@ export const TEST_DATA = [
     websiteCreatedAtDateTime: "2024-04-17",
     websiteCreatedAtString: "5 hours ago",
     ageInDays: "1",
-    keywords: "next js",
+    keywords: "bnext js",
     applied: 1,
     blacklisted: 1,
   },
@@ -31,8 +31,8 @@ export const TEST_DATA = [
     websiteCreatedAtDateTime: "2024-04-11",
     websiteCreatedAtString: "6 days ago",
     ageInDays: "7",
-    keywords: "next js",
-    applied: 0,
+    keywords: "anode js",
+    applied: 1,
     blacklisted: 0,
   },
   {
@@ -45,7 +45,7 @@ export const TEST_DATA = [
     ageInDays: "7",
     keywords: "next js",
     applied: 0,
-    blacklisted: 0,
+    blacklisted: 1,
   },
   {
     title: "DevOps Engineer",

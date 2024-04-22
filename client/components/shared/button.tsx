@@ -1,4 +1,4 @@
-import React, { MouseEvent, MouseEventHandler, ReactNode } from "react";
+import React, { ReactNode } from "react";
 
 const Button = ({
   children,
@@ -9,7 +9,6 @@ const Button = ({
 }: {
   children: ReactNode;
   variation?: "primary" | "secondary" | "primaryHollow";
-  // onClick?: MouseEventHandler<HTMLButtonElement>;
   onClick?: Function;
   type?: "submit" | "reset" | "button" | undefined;
   disabled?: boolean;
@@ -23,7 +22,7 @@ const Button = ({
 
   return (
     <button
-      className={`border-2 ${variations[variation]} transition-all duration-300 rounded-md p-1 w-full h-full`}
+      className={`border-2 ${variations[variation]} transition-all duration-300 rounded-md px-1 py-1`}
       onClick={(e) => onClick?.()}
       type={type}
       disabled={disabled}

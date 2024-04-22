@@ -5,6 +5,7 @@ import PostTable from "./postTable";
 import PostSearchBar from "./postSearchBar";
 import FilterOptions from "../../components/filterOptions";
 import BlacklistedWordTable from "../../components/blacklistedWordTable";
+import LogoutButton from "@/components/logoutButton";
 
 const ClientPostsPage = ({ data }: { data: Post[] }) => {
   const [searchVal, setSearchVal] = useState("");
@@ -18,15 +19,20 @@ const ClientPostsPage = ({ data }: { data: Post[] }) => {
   }
 
   return (
-    <div className="p-14 flex flex-row gap-4 rounded-sm bg-card w-full h-screen">
-      <div className="flex flex-col gap-4 ">
-        <PostSearchBar value={searchVal} onChange={onChange} />
-        <FilterOptions />
-        <div className="w-full h-full">
-          <PostTable data={filteredDataByKeyword} />
-        </div>
+    <div className="p-14 rounded-sm bg-card w-screen h-screen flex flex-col gap-4">
+      <div className="flex justify-end">
+        <LogoutButton />
       </div>
-      <BlacklistedWordTable />
+      <div className="flex flex-row gap-4">
+        <div className="flex flex-col gap-4 ">
+          <PostSearchBar value={searchVal} onChange={onChange} />
+          <FilterOptions />
+          <div className="w-full h-full">
+            <PostTable data={filteredDataByKeyword} />
+          </div>
+        </div>
+        <BlacklistedWordTable />
+      </div>
     </div>
   );
 };

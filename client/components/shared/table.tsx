@@ -27,7 +27,7 @@ import {
 type Body = { [key: string]: any }[];
 
 type Props = {
-  head: { label: string; value: string; func?: Function }[];
+  head: { label: string; value: string; bodyFunc?: Function }[];
   body: { [key: string]: any }[];
   onClickHead?: Function;
   onClickBody?: MouseEventHandler<HTMLTableRowElement>;
@@ -47,7 +47,7 @@ function ascDesc(
 }
 
 function sort(data: Body, columnName: string, direction: string) {
-  data.sort((a, b) => {
+  return data.sort((a, b) => {
     switch (typeof data[0][columnName]) {
       case "string":
         if (direction === "desc") {
@@ -67,12 +67,15 @@ function sort(data: Body, columnName: string, direction: string) {
 }
 
 const Table = ({ head, body, onClickHead, onClickBody, initSort }: Props) => {
-  const [sortVal, setSortVal] = useState("");
+  const [sortVal, setSortVal] = useState(`${head[0].value}-desc`);
+
+  const sortedData = sort(body, sortVal.split("-")[0], sortVal.split("-")[1]);
 
   function handleHead(head: string) {
+    setSortVal(head);
     onClickHead?.(head);
     ascDesc(head, sortVal, setSortVal);
-    sort(body, head, sortVal.split("-")[1]);
+    // sort(body, head, sortVal.split("-")[1]);
   }
 
   return (
@@ -94,7 +97,7 @@ const Table = ({ head, body, onClickHead, onClickBody, initSort }: Props) => {
           </thead>
 
           <tbody>
-            {body.map((row, index) => (
+            {sortedData.map((row, index) => (
               <tr
                 key={index}
                 className={`border-t border-current`}
@@ -102,7 +105,9 @@ const Table = ({ head, body, onClickHead, onClickBody, initSort }: Props) => {
               >
                 {head.map((el, index) => (
                   <td className="px-6 py-4" key={index}>
-                    {el.func ? el.func(row[el.value], row) : row[el.value]}
+                    {el.bodyFunc
+                      ? el.bodyFunc(row[el.value], row)
+                      : row[el.value]}
                   </td>
                 ))}
               </tr>
