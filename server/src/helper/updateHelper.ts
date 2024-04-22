@@ -1,7 +1,6 @@
-export function formatInputForUpdate(
-  id: string,
-  data: { [key: string]: string | boolean | number | undefined }
-) {
+export function formatInputForUpdate(data: {
+  [key: string]: string | boolean | number | undefined;
+}) {
   Object.keys(data).forEach((key) => {
     if (data[key as keyof typeof data] === undefined) {
       delete data[key as keyof typeof data];
@@ -12,6 +11,6 @@ export function formatInputForUpdate(
     .map((key) => `${key} = ?`)
     .join(", ");
 
-  const preparedArr = [...Object.values(data), id];
+  const preparedArr = Object.values(data);
   return { keyValue, preparedArr };
 }

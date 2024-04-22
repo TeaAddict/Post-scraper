@@ -43,11 +43,12 @@ export async function sqlUpdateUser(
   }
 ) {
   try {
-    const { keyValue, preparedArr } = formatInputForUpdate(id, data);
+    const { keyValue, preparedArr } = formatInputForUpdate(data);
+    const arrWithId = [...preparedArr, id];
 
     const [result, meta] = await pool.query(
       `UPDATE user SET ${keyValue} WHERE id = ?`,
-      preparedArr
+      arrWithId
     );
     const { affectedRows } = result as { affectedRows: number };
     if (affectedRows) return sqlGetUser(id);

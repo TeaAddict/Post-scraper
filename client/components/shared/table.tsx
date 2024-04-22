@@ -109,13 +109,13 @@ const Table = ({ head, body, onClickHead, onClickBody, initSort }: Props) => {
             ))}
           </tbody>
         </table>
-        <ScrollAreaScrollbar orientation="vertical">
-          <ScrollAreaThumb className="border-2 rounded-md" />
-        </ScrollAreaScrollbar>
-        <ScrollAreaScrollbar orientation="horizontal">
-          <ScrollAreaThumb className="border-2 rounded-md" />
-        </ScrollAreaScrollbar>
       </ScrollAreaViewport>
+      <ScrollAreaScrollbar orientation="vertical">
+        <ScrollAreaThumb className="border-2 rounded-md" />
+      </ScrollAreaScrollbar>
+      <ScrollAreaScrollbar orientation="horizontal">
+        <ScrollAreaThumb className="border-2 rounded-md" />
+      </ScrollAreaScrollbar>
     </ScrollArea>
   );
 };

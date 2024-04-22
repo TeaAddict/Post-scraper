@@ -15,7 +15,7 @@ const ClientPostsPage = ({ data }: { data: Post[] }) => {
   }
 
   return (
-    <div className="p-14 flex flex-row gap-4 rounded-sm bg-card w-full h-full">
+    <div className="p-14 flex flex-row gap-4 rounded-sm bg-card w-full h-screen">
       <div className="flex flex-col gap-4 ">
         <PostSearchBar value={searchVal} onChange={onChange} />
         <FilterOptions />

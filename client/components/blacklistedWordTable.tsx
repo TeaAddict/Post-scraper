@@ -71,12 +71,14 @@ const BlacklistedWordTable = () => {
     <div className="flex flex-col flex-shrink p-2 border-2 gap-3 max-h-fit">
       <p>Blacklisted keywords</p>
       <div className="flex gap-4">
-        <div className="flex">
+        <div className="flex-1">
           <InputBox value={inputVal} onChange={onChange} />
         </div>
-        <Button variation="primary" onClick={onAdd}>
-          Add
-        </Button>
+        <div className="w-20">
+          <Button variation="primary" onClick={onAdd}>
+            Add
+          </Button>
+        </div>
       </div>
       <Table head={head} body={keywords} />
     </div>

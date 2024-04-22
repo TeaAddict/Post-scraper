@@ -6,6 +6,7 @@ import {
   sqlUpdateUser,
 } from "../db/user/actions.js";
 import { createHash, random } from "../helper/authHelpers.js";
+import { sqlCreateSettings } from "../db/settings/actions.js";
 
 export async function login(req: express.Request, res: express.Response) {
   try {
@@ -47,6 +48,10 @@ export async function register(req: express.Request, res: express.Response) {
     const user = await sqlCreateUser(username, hashedPassword, salt);
     if (!user)
       return res.status(400).json({ error: "Problem with registration" });
+
+    const settings = await sqlCreateSettings(user.id.toString());
+    if (!settings)
+      return res.status(400).json({ error: "Problem with creating settings" });
 
     const sessionToken = random();
     res.cookie("USER-AUTH", sessionToken);

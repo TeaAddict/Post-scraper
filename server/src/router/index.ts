@@ -4,6 +4,7 @@ import job from "./job.js";
 import authentication from "./authentication.js";
 import scrape from "./scrape.js";
 import { blacklist } from "./blacklist.js";
+import settings from "./settings.js";
 
 const router = express.Router();
 
@@ -13,6 +14,7 @@ export default () => {
   job(router);
   scrape(router);
   blacklist(router);
+  settings(router);
 
   return router;
 };

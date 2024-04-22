@@ -35,7 +35,7 @@ const RegisterForm = () => {
       {
         onSuccess() {
           console.log("Successfully registered!");
-          router.push("/");
+          router.push("/post");
           reset();
         },
       }

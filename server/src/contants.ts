@@ -1,7 +1,7 @@
 export const BLACKLISTED_KEYWORDS = ["senior", "lead", "php"];
 export const MAX_AGE = 20;
 
-export const TABLE_LIST = ["user", "job", "blacklist"];
+export const TABLE_LIST = ["user", "job", "blacklist", "settings"];
 
 export const CLEAN_DATA = [
   {

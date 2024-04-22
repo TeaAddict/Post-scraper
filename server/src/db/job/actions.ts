@@ -42,8 +42,9 @@ export async function sqlCreateJob(id: string, post: Post) {
 
 export async function sqlUpdateJob(id: string, post: Post) {
   try {
-    const { keyValue, preparedArr } = formatInputForUpdate(id, post);
-    await pool.query(`UPDATE job SET ${keyValue} WHERE id = ?`, preparedArr);
+    const { keyValue, preparedArr } = formatInputForUpdate(post);
+    const arrWithId = [...preparedArr, id];
+    await pool.query(`UPDATE job SET ${keyValue} WHERE id = ?`, arrWithId);
     const job = await sqlGetJob(id);
     return job;
   } catch (error) {
