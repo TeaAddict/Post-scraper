@@ -1,9 +1,7 @@
 import { BLACKLISTED_KEYWORDS, MAX_AGE, UNFILTERED_DATA } from "../contants";
 import express from "express";
-import { createJob } from "./job";
-import { sqlCreateJob, sqlGetJobByLink } from "../db/job/actions";
+import { sqlCreatePost, sqlGetPostByLink } from "../db/post/actions";
 import { Post } from "../Types/postTypes";
-import { getLinkedinPosts } from "../helper/scraping/getLinkedinPosts";
 
 function filterByTitle(posts: Post[], filterWordList: string[]) {
   return posts.filter(
@@ -20,22 +18,21 @@ export async function getPosts(req: express.Request, res: express.Response) {
   try {
     const { id } = req.cookies;
 
-    // const unfilteredJobs = await getLinkedinPosts("next js", "Lithuania");
-    // if (!unfilteredJobs)
+    // const unfilteredPosts = await getLinkedinPosts("next js", "Lithuania");
+    // if (!unfilteredPosts)
     //   return res.status(400).json({ error: "Problem with scraper" });
 
-    const unfilteredJobs = UNFILTERED_DATA; // TODO: remove later
+    const unfilteredPosts = UNFILTERED_DATA; // TODO: remove later
 
-    const cleanPosts = filterByTitle(unfilteredJobs, BLACKLISTED_KEYWORDS);
+    const cleanPosts = filterByTitle(unfilteredPosts, BLACKLISTED_KEYWORDS);
 
     cleanPosts.forEach(async (post) => {
-      const res = await sqlGetJobByLink(post.link);
+      const res = await sqlGetPostByLink(post.link);
       if (res) return;
 
-      sqlCreateJob(id, post);
+      sqlCreatePost(id, post);
     });
 
-    // console.log(cleanPosts);
     return res.status(200).json(cleanPosts);
   } catch (error) {
     console.log(error);

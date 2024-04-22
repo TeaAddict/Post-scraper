@@ -2,18 +2,18 @@ import { formatInputForUpdate } from "../../helper/updateHelper.js";
 import { DbPost, Post } from "../../Types/postTypes.js";
 import pool from "../index.js";
 
-export async function sqlGetJobs() {
+export async function sqlGetPosts() {
   try {
-    const [result, meta] = await pool.query("SELECT * FROM job");
+    const [result, meta] = await pool.query("SELECT * FROM post");
     return result as unknown as DbPost[];
   } catch (error) {
     console.log(error);
   }
 }
 
-export async function sqlGetJob(id: string) {
+export async function sqlGetPost(id: string) {
   try {
-    const [result, meta] = await pool.query("SELECT * FROM job WHERE id = ?", [
+    const [result, meta] = await pool.query("SELECT * FROM post WHERE id = ?", [
       id,
     ]);
     return (result as {}[])[0];
@@ -22,50 +22,50 @@ export async function sqlGetJob(id: string) {
   }
 }
 
-export async function sqlCreateJob(id: string, post: Post) {
+export async function sqlCreatePost(id: string, post: Post) {
   try {
     const propertyCount = Object.keys(post).length;
     const preparedPlaceholder = Array(propertyCount + 1)
       .fill("?")
       .join(", ");
     const columns = [...Object.keys(post), "userId"];
-    const queryString = `INSERT INTO job (${columns}) VALUES (${preparedPlaceholder})`;
+    const queryString = `INSERT INTO post (${columns}) VALUES (${preparedPlaceholder})`;
     const preparedValues = [...Object.values(post), id];
     const [result, meta] = await pool.query(queryString, preparedValues);
     const insertId = (result as { insertId: number }).insertId;
-    const job = await sqlGetJob(insertId.toString());
-    return job;
+    const resPost = await sqlGetPost(insertId.toString());
+    return resPost;
   } catch (error) {
     console.log(error);
   }
 }
 
-export async function sqlUpdateJob(id: string, post: Post) {
+export async function sqlUpdatePost(id: string, post: Post) {
   try {
     const { keyValue, preparedArr } = formatInputForUpdate(post);
     const arrWithId = [...preparedArr, id];
-    await pool.query(`UPDATE job SET ${keyValue} WHERE id = ?`, arrWithId);
-    const job = await sqlGetJob(id);
-    return job;
+    await pool.query(`UPDATE post SET ${keyValue} WHERE id = ?`, arrWithId);
+    const resPost = await sqlGetPost(id);
+    return resPost;
   } catch (error) {
     console.log(error);
   }
 }
 
-export async function sqlDeleteJob(id: string) {
+export async function sqlDeletePost(id: string) {
   try {
-    const job = await sqlGetJob(id);
-    await pool.query("DELETE FROM job WHERE id = ?", [id]);
-    return job;
+    const post = await sqlGetPost(id);
+    await pool.query("DELETE FROM post WHERE id = ?", [id]);
+    return post;
   } catch (error) {
     console.log(error);
   }
 }
 
-export async function sqlGetJobByLink(link: string) {
+export async function sqlGetPostByLink(link: string) {
   try {
     const [result, meta] = await pool.query(
-      "SELECT * FROM job WHERE link = ?",
+      "SELECT * FROM post WHERE link = ?",
       [link]
     );
     return (result as {}[])[0];

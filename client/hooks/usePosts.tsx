@@ -1,7 +1,8 @@
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
 const usePosts = () => {
-  return <div>usePosts</div>;
+  const query = useQuery({ queryKey: ["posts"], queryFn: getPosts });
 };
 
 export default usePosts;
