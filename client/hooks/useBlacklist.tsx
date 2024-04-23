@@ -24,7 +24,7 @@ export const useAddToBlacklist = (queryClient: QueryClient) => {
       queryClient.invalidateQueries({ queryKey: ["blacklist"] });
     },
     onError: (e) => {
-      console.log("Problem with adding keyword to blacklist:", e);
+      console.log("Problem with adding keyword:", e.message);
     },
   });
   return mutation;
@@ -37,7 +37,7 @@ export const useDeleteFromBlacklist = (queryClient: QueryClient) => {
       queryClient.invalidateQueries({ queryKey: ["blacklist"] });
     },
     onError: (e) => {
-      console.log("Problem with deleting keyword from blacklist:", e);
+      console.log("Problem with deleting keyword from blacklist:", e.message);
     },
   });
   return mutation;

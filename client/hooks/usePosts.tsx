@@ -14,7 +14,7 @@ export const useGetNewPosts = () => {
   return useMutation({
     mutationFn: getNewPosts,
     onError: (e) => {
-      console.log(e);
+      console.log(e.message);
     },
     onSuccess: (data) => {
       console.log(data);
@@ -28,7 +28,7 @@ export const useUpdatePost = () => {
   return useMutation({
     mutationFn: updatePost,
     onError: (error) => {
-      console.log(error);
+      console.log(error.message);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });

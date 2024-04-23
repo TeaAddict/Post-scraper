@@ -2,7 +2,7 @@ import { formatInputForUpdate } from "../../helper/updateHelper";
 import { Settings } from "../../Types/settingsTypes";
 import pool from "../index";
 
-export async function sqlGetSettingsByUserId(userId: string) {
+export async function sqlGetSettingsByUserId(userId: number) {
   try {
     const [result, meta] = await pool.query(
       "SELECT * FROM settings WHERE userId = ?",
@@ -14,7 +14,7 @@ export async function sqlGetSettingsByUserId(userId: string) {
   }
 }
 
-export async function sqlCreateSettings(userId: string) {
+export async function sqlCreateSettings(userId: number) {
   try {
     const [result, meta] = await pool.query(
       "INSERT INTO settings (userId) VALUES (?)",
@@ -34,7 +34,7 @@ export async function sqlCreateSettings(userId: string) {
 // blacklistedFilter: boolean;
 // userId: number;
 
-export async function sqlUpdateSettings(userId: string, data: Settings) {
+export async function sqlUpdateSettings(userId: number, data: Settings) {
   try {
     const { keyValue, preparedArr } = formatInputForUpdate(data);
     const values = [...preparedArr, userId];

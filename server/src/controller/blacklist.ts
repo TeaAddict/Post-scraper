@@ -5,10 +5,16 @@ import {
   sqlGetKeywords,
   sqlRemoveFromBlacklist,
 } from "../db/blacklist/actions";
+import { sqlGetUserById } from "../db/user/actions";
 
 export async function getKeywords(req: express.Request, res: express.Response) {
   try {
-    const keywords = await sqlGetKeywords();
+    const { userId } = res.locals;
+
+    const user = await sqlGetUserById(userId);
+    if (!user) return res.status(400).json({ error: "User is unauthorized" });
+
+    const keywords = await sqlGetKeywords(user.id);
     if (!keywords || !keywords.length)
       return res.status(400).json({ error: "Problem with getting keywords" });
 
@@ -43,6 +49,11 @@ export async function addToBlacklist(
   res: express.Response
 ) {
   try {
+    const { userId } = res.locals;
+
+    const user = await sqlGetUserById(userId);
+    if (!user) return res.status(400).json({ error: "User is unauthorized" });
+
     const { keyword } = req.body;
     if (!keyword)
       return res
@@ -53,7 +64,7 @@ export async function addToBlacklist(
     if (keywordExists)
       return res.status(400).json({ error: "Keyword already exists" });
 
-    const resKeyword = await sqlAddToBlacklist(keyword);
+    const resKeyword = await sqlAddToBlacklist(keyword, user.id);
     if (!resKeyword)
       return res.status(400).json({ error: "Problem with creating keyword" });
 

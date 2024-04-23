@@ -11,11 +11,11 @@ export async function getPosts() {
       mode: "cors",
     });
     const resBody = await res.json();
-    if (res.status >= 400) throw new Error(resBody);
+    if (res.status >= 400) throw new Error(resBody.error);
 
     return resBody;
   } catch (error: any) {
-    console.log(error);
+    console.log(error.message);
     throw new Error(error);
   }
 }
@@ -35,11 +35,10 @@ export async function getNewPosts({ keyword, location }: Data) {
       }),
     });
     const resBody = await res.json();
-    if (res.status >= 400) throw new Error(resBody);
+    if (res.status >= 400) throw new Error(resBody.error);
 
     return resBody;
   } catch (error: any) {
-    console.log(error);
     throw new Error(error);
   }
 }

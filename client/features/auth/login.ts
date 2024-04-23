@@ -23,7 +23,6 @@ export async function login({
 
     return resBody;
   } catch (error: any) {
-    console.log(error);
-    throw new Error(error.message);
+    throw new Error(error);
   }
 }

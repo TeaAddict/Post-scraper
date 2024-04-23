@@ -15,11 +15,10 @@ export async function updatePost({ id, body }: Data) {
     });
 
     const resBody = await res.json();
-    if (res.status >= 400) throw new Error(resBody);
+    if (res.status >= 400) throw new Error(resBody.error);
 
     return resBody;
   } catch (error: any) {
-    console.log(error);
     throw new Error(error);
   }
 }

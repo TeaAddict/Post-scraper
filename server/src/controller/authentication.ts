@@ -25,7 +25,7 @@ export async function login(req: express.Request, res: express.Response) {
     const sessionToken = random();
     res.cookie("USER-AUTH", sessionToken, { maxAge: 60000000 });
     res.cookie("id", user.id);
-    sqlUpdateUser(user.id.toString(), { sessionToken });
+    sqlUpdateUser(user.id, { sessionToken });
 
     return res.status(200).json({ message: "Logged in successfully!" });
   } catch (error) {
@@ -49,14 +49,14 @@ export async function register(req: express.Request, res: express.Response) {
     if (!user)
       return res.status(400).json({ error: "Problem with registration" });
 
-    const settings = await sqlCreateSettings(user.id.toString());
+    const settings = await sqlCreateSettings(user.id);
     if (!settings)
       return res.status(400).json({ error: "Problem with creating settings" });
 
     const sessionToken = random();
     res.cookie("USER-AUTH", sessionToken);
     res.cookie("id", user.id);
-    sqlUpdateUser(user.id.toString(), { sessionToken });
+    sqlUpdateUser(user.id, { sessionToken });
 
     return res.status(200).json(user);
   } catch (error) {

@@ -3,6 +3,7 @@ import express from "express";
 import { sqlCreatePost, sqlGetPostByLink } from "../db/post/actions";
 import { Post } from "../Types/postTypes";
 import { sqlGetUserBySessionToken } from "../db/user/actions";
+import { sqlGetKeywords } from "../db/blacklist/actions";
 
 function filterByTitle(posts: Post[], filterWordList: string[]) {
   return posts.filter(
@@ -28,6 +29,9 @@ export async function getPosts(req: express.Request, res: express.Response) {
     const user = await sqlGetUserBySessionToken(sessionToken);
     if (!user) return res.status(400).json({ error: "User does not exist" });
 
+    const blacklistedKeywords = await sqlGetKeywords(user.id);
+
+    return res.status(200).json(blacklistedKeywords);
     console.log("=============================");
     console.log("User:", user);
     console.log("Req body:", req.body);

@@ -62,11 +62,11 @@ export async function getPostByUserId(
     const user = await sqlGetUserBySessionToken(sessionToken);
     if (!user) return res.status(400).json({ error: "User does not exist" });
 
-    const posts = await sqlGetPostByUserId(user.id.toString());
+    const posts = await sqlGetPostByUserId(user.id);
     if (!posts)
       return res.status(400).json({ error: "Problem with getting post" });
 
-    const settings = await sqlGetSettingsByUserId(user.id.toString());
+    const settings = await sqlGetSettingsByUserId(user.id);
     if (!settings)
       return res.status(400).json({ error: "Problem with getting settings" });
 
@@ -98,7 +98,7 @@ export async function createPost(req: express.Request, res: express.Response) {
     const post = await sqlGetPostByLink(link);
     if (post) return res.status(400).json({ error: "post already exists" });
 
-    const resultpost = await sqlCreatePost(id, req.body);
+    const resultpost = await sqlCreatePost(Number(id), req.body);
     if (!resultpost)
       return res.status(400).json({ error: "Problem with creating post" });
 
@@ -116,7 +116,7 @@ export async function updatePostById(
   try {
     const { id } = req.params;
 
-    const post = await sqlUpdatePost(id, req.body);
+    const post = await sqlUpdatePost(Number(id), req.body);
     if (!post)
       return res.status(400).json({ error: "Problem with updating post" });
 
@@ -130,7 +130,7 @@ export async function updatePostById(
 export async function deletePost(req: express.Request, res: express.Response) {
   try {
     const { id } = req.params;
-    const post = await sqlDeletePost(id);
+    const post = await sqlDeletePost(Number(id));
     if (!post)
       return res.status(400).json({ error: "Problem with deleting post" });
 

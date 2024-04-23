@@ -1,8 +1,11 @@
 import pool from "../index";
 
-export async function sqlGetKeywords() {
+export async function sqlGetKeywords(userId: number) {
   try {
-    const [result, meta] = await pool.query("SELECT * FROM blacklist");
+    const [result, meta] = await pool.query(
+      "SELECT * FROM blacklist WHERE userId = ?",
+      [userId]
+    );
     return result as [];
   } catch (error) {
     console.log(error);
@@ -22,11 +25,11 @@ export async function sqlGetKeyword(keyword: string) {
   }
 }
 
-export async function sqlAddToBlacklist(keyword: string) {
+export async function sqlAddToBlacklist(keyword: string, userId: number) {
   try {
     const [result, meta] = await pool.query(
-      "INSERT INTO blacklist (keyword) VALUES (?)",
-      [keyword]
+      "INSERT INTO blacklist (keyword, userId) VALUES (?, ?)",
+      [keyword, userId]
     );
     if ((result as { insertId: number })["insertId"] === 0) return false;
 

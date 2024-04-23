@@ -7,7 +7,7 @@ import {
 } from "../controller/blacklist";
 
 export function blacklist(router: express.Router) {
-  router.get("/blacklist", getKeywords);
-  router.post("/blacklist", addToBlacklist);
-  router.delete("/blacklist", removeFromBlacklist);
+  router.get("/blacklist", validateCookie, getKeywords);
+  router.post("/blacklist", validateCookie, addToBlacklist);
+  router.delete("/blacklist", validateCookie, removeFromBlacklist);
 }

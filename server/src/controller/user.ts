@@ -1,7 +1,7 @@
 import express from "express";
 import {
   sqlDeleteUser,
-  sqlGetUser,
+  sqlGetUserById,
   sqlGetUsers,
   sqlUpdateUser,
 } from "../db/user/actions.js";
@@ -19,7 +19,7 @@ export async function getUsers(req: express.Request, res: express.Response) {
 export async function getUser(req: express.Request, res: express.Response) {
   try {
     const { id } = req.params;
-    const user = await sqlGetUser(id);
+    const user = await sqlGetUserById(Number(id));
     if (!user) return res.status(400).json("User does not exist");
 
     delete user.password;
@@ -36,13 +36,14 @@ export async function getUser(req: express.Request, res: express.Response) {
 export async function updateUser(req: express.Request, res: express.Response) {
   try {
     const { id } = req.params;
+    const numId = Number(id);
     const { username, password } = req.body;
 
-    const exists = await sqlGetUser(id);
+    const exists = await sqlGetUserById(numId);
     if (!exists)
       return res.status(400).json({ message: "User does not exist" });
 
-    const result = await sqlUpdateUser(id, { username, password });
+    const result = await sqlUpdateUser(numId, { username, password });
     if (!result) throw new Error("Problem updating user in db");
 
     return res.status(201).json(result);
@@ -55,11 +56,12 @@ export async function updateUser(req: express.Request, res: express.Response) {
 export async function deleteUser(req: express.Request, res: express.Response) {
   try {
     const { id } = req.params;
+    const numId = Number(id);
 
-    const user = await sqlGetUser(id);
+    const user = await sqlGetUserById(numId);
     if (!user) return res.status(400).json({ error: "User does not exist" });
 
-    const result = await sqlDeleteUser(id);
+    const result = await sqlDeleteUser(numId);
     if (!result) throw new Error("Problem with deleting user from db");
     return res.status(201).json(user);
   } catch (error) {

@@ -11,7 +11,7 @@ export async function sqlGetPosts() {
   }
 }
 
-export async function sqlGetPostById(id: string) {
+export async function sqlGetPostById(id: number) {
   try {
     const [result, meta] = await pool.query("SELECT * FROM post WHERE id = ?", [
       id,
@@ -21,7 +21,7 @@ export async function sqlGetPostById(id: string) {
     console.log(error);
   }
 }
-export async function sqlGetPostByUserId(id: string) {
+export async function sqlGetPostByUserId(id: number) {
   try {
     const [result, meta] = await pool.query(
       "SELECT * FROM post WHERE userId = ?",
@@ -33,7 +33,7 @@ export async function sqlGetPostByUserId(id: string) {
   }
 }
 
-export async function sqlCreatePost(id: string, post: Post) {
+export async function sqlCreatePost(id: number, post: Post) {
   try {
     const propertyCount = Object.keys(post).length;
     const preparedPlaceholder = Array(propertyCount + 1)
@@ -44,14 +44,14 @@ export async function sqlCreatePost(id: string, post: Post) {
     const preparedValues = [...Object.values(post), id];
     const [result, meta] = await pool.query(queryString, preparedValues);
     const insertId = (result as { insertId: number }).insertId;
-    const resPost = await sqlGetPostById(insertId.toString());
+    const resPost = await sqlGetPostById(insertId);
     return resPost;
   } catch (error) {
     console.log(error);
   }
 }
 
-export async function sqlUpdatePost(id: string, post: Post) {
+export async function sqlUpdatePost(id: number, post: Post) {
   try {
     const { keyValue, preparedArr } = formatInputForUpdate(post);
     const arrWithId = [...preparedArr, id];
@@ -63,7 +63,7 @@ export async function sqlUpdatePost(id: string, post: Post) {
   }
 }
 
-export async function sqlDeletePost(id: string) {
+export async function sqlDeletePost(id: number) {
   try {
     const post = await sqlGetPostById(id);
     await pool.query("DELETE FROM post WHERE id = ?", [id]);

@@ -17,7 +17,7 @@ const BlacklistedWordTable = () => {
   const addMutation = useAddToBlacklist(queryClient);
   const deleteMutation = useDeleteFromBlacklist(queryClient);
 
-  const keywords = (query?.data as Blacklist[])?.map((val, index) => ({
+  const keywords = (query.data as Blacklist[])?.map((val, index) => ({
     keyword: val.keyword,
     nr: index + 1,
   }));
@@ -72,7 +72,7 @@ const BlacklistedWordTable = () => {
           </Button>
         </div>
       </div>
-      <Table head={head} body={keywords} />
+      {keywords && <Table head={head} body={keywords} />}
     </div>
   );
 };

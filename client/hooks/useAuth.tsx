@@ -5,11 +5,8 @@ import { useMutation } from "@tanstack/react-query";
 export const useLoginMutation = () => {
   const mutation = useMutation({
     mutationFn: login,
-    onSuccess: () => {
-      console.log("Successfully logged in!");
-    },
     onError: (e) => {
-      console.log(`Problem with logging in: ${e}`);
+      console.log("Problem with logging in:", e);
     },
   });
 
@@ -17,6 +14,11 @@ export const useLoginMutation = () => {
 };
 
 export const useRegisterMutation = () => {
-  const mutation = useMutation({ mutationFn: register });
+  const mutation = useMutation({
+    mutationFn: register,
+    onError: (e) => {
+      console.log("Problem with registration:", e);
+    },
+  });
   return mutation;
 };

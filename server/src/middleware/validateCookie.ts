@@ -12,6 +12,9 @@ export async function validateCookie(
 
     const user = await sqlGetUserBySessionToken(cookies["USER-AUTH"]);
     if (!user) return res.status(403).json("Unauthorized");
+
+    res.locals.userId = user.id;
+
     next();
   } catch (error) {
     console.log(error);

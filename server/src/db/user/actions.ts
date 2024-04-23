@@ -22,7 +22,7 @@ export async function sqlGetUsers() {
   }
 }
 
-export async function sqlGetUser(id: string) {
+export async function sqlGetUserById(id: number) {
   try {
     const [result, meta] = await pool.query("SELECT * FROM user WHERE id = ?", [
       id,
@@ -36,7 +36,7 @@ export async function sqlGetUser(id: string) {
 }
 
 export async function sqlUpdateUser(
-  id: string,
+  id: number,
   data: {
     username?: string;
     password?: string;
@@ -52,7 +52,7 @@ export async function sqlUpdateUser(
       arrWithId
     );
     const { affectedRows } = result as { affectedRows: number };
-    if (affectedRows) return sqlGetUser(id);
+    if (affectedRows) return sqlGetUserById(id);
   } catch (error) {
     console.log(error);
   }
@@ -69,7 +69,7 @@ export async function sqlCreateUser(
       [username, password, salt]
     );
     const insert_id = (result as { insertId: number }).insertId;
-    const user = await sqlGetUser(insert_id.toString());
+    const user = await sqlGetUserById(insert_id);
     delete user?.password;
     delete user?.salt;
     delete user?.sessionToken;
@@ -79,9 +79,9 @@ export async function sqlCreateUser(
   }
 }
 
-export async function sqlDeleteUser(id: string) {
+export async function sqlDeleteUser(id: number) {
   try {
-    const user = await sqlGetUser(id);
+    const user = await sqlGetUserById(id);
     const [result, meta] = await pool.query("DELETE FROM user WHERE id = ?", [
       id,
     ]);
