@@ -1,4 +1,3 @@
-export const BLACKLISTED_KEYWORDS = ["senior", "lead", "php"];
 export const MAX_AGE = 20;
 
 export const TABLE_LIST = ["user", "post", "blacklist", "settings"];

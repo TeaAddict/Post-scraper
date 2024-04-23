@@ -1,3 +1,4 @@
+import { BlacklistedKeyword } from "../../Types/blacklistTypes";
 import pool from "../index";
 
 export async function sqlGetKeywords(userId: number) {
@@ -6,7 +7,9 @@ export async function sqlGetKeywords(userId: number) {
       "SELECT * FROM blacklist WHERE userId = ?",
       [userId]
     );
-    return result as [];
+    if (!result) throw new Error("Problem with getting blacklisted keyword");
+
+    return result as BlacklistedKeyword[];
   } catch (error) {
     console.log(error);
   }
@@ -19,7 +22,7 @@ export async function sqlGetKeyword(keyword: string) {
       [keyword]
     );
 
-    return (result as {}[])[0];
+    return (result as {}[])[0] as BlacklistedKeyword;
   } catch (error) {
     console.log(error);
   }
@@ -34,6 +37,9 @@ export async function sqlAddToBlacklist(keyword: string, userId: number) {
     if ((result as { insertId: number })["insertId"] === 0) return false;
 
     const resKeyword = await sqlGetKeyword(keyword);
+    if (!resKeyword)
+      throw new Error("Problem with getting blacklisted keyword");
+
     return resKeyword;
   } catch (error) {
     console.log(error);
@@ -43,6 +49,9 @@ export async function sqlAddToBlacklist(keyword: string, userId: number) {
 export async function sqlRemoveFromBlacklist(keyword: string) {
   try {
     const keywordRes = await sqlGetKeyword(keyword);
+    if (!keywordRes)
+      throw new Error("Problem with getting blacklisted keyword");
+
     const [result, meta] = await pool.query(
       "DELETE FROM blacklist WHERE keyword = ?",
       [keyword]

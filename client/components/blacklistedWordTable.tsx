@@ -45,7 +45,15 @@ const BlacklistedWordTable = () => {
     {
       label: "empty",
       value: "empty",
-      func: (value: string, rowData: Blacklist) => {
+      bodyFunc: ({
+        cellVal,
+        cellCol,
+        rowData,
+      }: {
+        cellVal: string;
+        cellCol: string;
+        rowData: Blacklist;
+      }) => {
         return (
           <Button onClick={() => onDelete(rowData.keyword)}>
             <IoMdClose size={20} />

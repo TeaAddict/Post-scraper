@@ -15,7 +15,7 @@ export async function getKeywords(req: express.Request, res: express.Response) {
     if (!user) return res.status(400).json({ error: "User is unauthorized" });
 
     const keywords = await sqlGetKeywords(user.id);
-    if (!keywords || !keywords.length)
+    if (!keywords)
       return res.status(400).json({ error: "Problem with getting keywords" });
 
     return res.status(200).json(keywords);

@@ -1,8 +1,8 @@
-import { BLACKLISTED_KEYWORDS, MAX_AGE, UNFILTERED_DATA } from "../contants";
+import { MAX_AGE, UNFILTERED_DATA } from "../contants";
 import express from "express";
 import { sqlCreatePost, sqlGetPostByLink } from "../db/post/actions";
 import { Post } from "../Types/postTypes";
-import { sqlGetUserBySessionToken } from "../db/user/actions";
+import { sqlGetUserById, sqlGetUserBySessionToken } from "../db/user/actions";
 import { sqlGetKeywords } from "../db/blacklist/actions";
 
 function filterByTitle(posts: Post[], filterWordList: string[]) {
@@ -18,20 +18,22 @@ function filterByTitle(posts: Post[], filterWordList: string[]) {
 
 export async function getPosts(req: express.Request, res: express.Response) {
   try {
+    const { userId } = res.locals;
     let { keyword, location } = req.body;
     if (!keyword) return res.status(400).json({ error: "Requires a keyword" });
     if (!location) location = "Lithuania";
 
-    const sessionToken = req.cookies["USER-AUTH"];
-    if (!sessionToken)
-      return res.status(400).json({ error: "User is unauthorized" });
-
-    const user = await sqlGetUserBySessionToken(sessionToken);
+    const user = await sqlGetUserById(userId);
     if (!user) return res.status(400).json({ error: "User does not exist" });
 
     const blacklistedKeywords = await sqlGetKeywords(user.id);
+    if (!blacklistedKeywords)
+      return res
+        .status(400)
+        .json({ error: "Problem with getting blacklisted keywords" });
+    const cleanBlackList = blacklistedKeywords.map((val) => val.keyword);
 
-    return res.status(200).json(blacklistedKeywords);
+    return res.status(200).json(cleanBlackList);
     console.log("=============================");
     console.log("User:", user);
     console.log("Req body:", req.body);
@@ -44,13 +46,13 @@ export async function getPosts(req: express.Request, res: express.Response) {
 
     const unfilteredPosts = UNFILTERED_DATA; // TODO: remove later
 
-    const cleanPosts = filterByTitle(unfilteredPosts, BLACKLISTED_KEYWORDS);
+    const cleanPosts = filterByTitle(unfilteredPosts, cleanBlackList);
 
     cleanPosts.forEach(async (post) => {
       const res = await sqlGetPostByLink(post.link);
       if (res) return;
 
-      sqlCreatePost(user.id.toString(), post);
+      sqlCreatePost(userId, post);
     });
 
     // return res.status(200).json(cleanPosts);
