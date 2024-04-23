@@ -2,13 +2,13 @@ import { formatInputForUpdate } from "../../helper/updateHelper";
 import { Settings } from "../../Types/settingsTypes";
 import pool from "../index";
 
-export async function sqlGetSettings(userId: string) {
+export async function sqlGetSettingsByUserId(userId: string) {
   try {
     const [result, meta] = await pool.query(
       "SELECT * FROM settings WHERE userId = ?",
       [userId]
     );
-    return (result as {}[])[0];
+    return (result as {}[])[0] as Settings;
   } catch (error) {
     console.log(error);
   }
@@ -23,7 +23,7 @@ export async function sqlCreateSettings(userId: string) {
 
     if (!result) return false;
 
-    const settings = await sqlGetSettings(userId);
+    const settings = await sqlGetSettingsByUserId(userId);
     return settings;
   } catch (error) {
     console.log(error);
@@ -40,7 +40,7 @@ export async function sqlUpdateSettings(userId: string, data: Settings) {
     const values = [...preparedArr, userId];
     const query = `UPDATE settings SET ${keyValue} WHERE userId = ?`;
     const [result, meta] = await pool.query(query, values);
-    const settings = await sqlGetSettings(userId);
+    const settings = await sqlGetSettingsByUserId(userId);
     return settings;
   } catch (error) {
     console.log(error);

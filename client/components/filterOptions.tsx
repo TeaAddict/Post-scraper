@@ -1,12 +1,9 @@
 import React from "react";
 import { CheckboxWLabel } from "./shared/checkboxWLabel";
-
-import { useQueryClient } from "@tanstack/react-query";
 import { useSettings, useSettingsMutation } from "@/hooks/useSettings";
 
 const FilterOptions = () => {
-  const queryClient = useQueryClient();
-  const settingsMutation = useSettingsMutation(queryClient);
+  const settingsMutation = useSettingsMutation();
   const { data, isLoading } = useSettings();
 
   const appliedFilter = data?.appliedFilter === 1;

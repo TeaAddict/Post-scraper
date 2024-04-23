@@ -11,12 +11,23 @@ export async function sqlGetPosts() {
   }
 }
 
-export async function sqlGetPost(id: string) {
+export async function sqlGetPostById(id: string) {
   try {
     const [result, meta] = await pool.query("SELECT * FROM post WHERE id = ?", [
       id,
     ]);
     return (result as {}[])[0];
+  } catch (error) {
+    console.log(error);
+  }
+}
+export async function sqlGetPostByUserId(id: string) {
+  try {
+    const [result, meta] = await pool.query(
+      "SELECT * FROM post WHERE userId = ?",
+      [id]
+    );
+    return result as Post[];
   } catch (error) {
     console.log(error);
   }
@@ -33,7 +44,7 @@ export async function sqlCreatePost(id: string, post: Post) {
     const preparedValues = [...Object.values(post), id];
     const [result, meta] = await pool.query(queryString, preparedValues);
     const insertId = (result as { insertId: number }).insertId;
-    const resPost = await sqlGetPost(insertId.toString());
+    const resPost = await sqlGetPostById(insertId.toString());
     return resPost;
   } catch (error) {
     console.log(error);
@@ -45,7 +56,7 @@ export async function sqlUpdatePost(id: string, post: Post) {
     const { keyValue, preparedArr } = formatInputForUpdate(post);
     const arrWithId = [...preparedArr, id];
     await pool.query(`UPDATE post SET ${keyValue} WHERE id = ?`, arrWithId);
-    const resPost = await sqlGetPost(id);
+    const resPost = await sqlGetPostById(id);
     return resPost;
   } catch (error) {
     console.log(error);
@@ -54,7 +65,7 @@ export async function sqlUpdatePost(id: string, post: Post) {
 
 export async function sqlDeletePost(id: string) {
   try {
-    const post = await sqlGetPost(id);
+    const post = await sqlGetPostById(id);
     await pool.query("DELETE FROM post WHERE id = ?", [id]);
     return post;
   } catch (error) {

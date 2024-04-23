@@ -1,5 +1,6 @@
 import { formatInputForUpdate } from "../../helper/updateHelper.js";
 import pool from "../index.js";
+import { UserT } from "../../Types/userTypes";
 
 export type User = {
   id: number;
@@ -108,8 +109,8 @@ export async function sqlGetUserBySessionToken(sessionToken: string) {
       "SELECT * FROM user WHERE sessionToken = ?",
       sessionToken
     );
-
-    return (result as {}[])[0];
+    const cleanRes = (result as {}[])[0] as UserT;
+    return cleanRes;
   } catch (error) {
     console.log(error);
   }

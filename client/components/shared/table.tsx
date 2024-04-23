@@ -8,7 +8,7 @@ import {
 } from "@radix-ui/react-scroll-area";
 import {
   Dispatch,
-  MouseEvent,
+  FC,
   MouseEventHandler,
   SetStateAction,
   useState,
@@ -27,11 +27,11 @@ import {
 type Body = { [key: string]: any }[];
 
 type Props = {
-  head: { label: string; value: string; bodyFunc?: Function }[];
+  head: { label: string; value: string; bodyFunc?: FC<any> }[];
   body: { [key: string]: any }[];
-  onClickHead?: Function;
+
   onClickBody?: MouseEventHandler<HTMLTableRowElement>;
-  initSort?: [{ name: string; value: string }];
+  initSort?: string;
 };
 
 function ascDesc(
@@ -50,14 +50,21 @@ function sort(data: Body, columnName: string, direction: string) {
   return data.sort((a, b) => {
     switch (typeof data[0][columnName]) {
       case "string":
-        if (direction === "desc") {
+        if (direction === "asc") {
           return a[columnName].localeCompare(b[columnName]);
         } else {
           return b[columnName].localeCompare(a[columnName]);
         }
 
       case "number":
-        if (direction === "desc") {
+        if (direction === "asc") {
+          return a[columnName] - b[columnName];
+        } else {
+          return b[columnName] - a[columnName];
+        }
+
+      case "object":
+        if (direction === "asc") {
           return a[columnName] - b[columnName];
         } else {
           return b[columnName] - a[columnName];
@@ -66,16 +73,16 @@ function sort(data: Body, columnName: string, direction: string) {
   });
 }
 
-const Table = ({ head, body, onClickHead, onClickBody, initSort }: Props) => {
-  const [sortVal, setSortVal] = useState(`${head[0].value}-desc`);
+const Table = ({ head, body, onClickBody, initSort }: Props) => {
+  const [sortVal, setSortVal] = useState(
+    `${initSort}-desc` ?? `${head[0].value}-desc`
+  );
 
   const sortedData = sort(body, sortVal.split("-")[0], sortVal.split("-")[1]);
 
   function handleHead(head: string) {
     setSortVal(head);
-    onClickHead?.(head);
     ascDesc(head, sortVal, setSortVal);
-    // sort(body, head, sortVal.split("-")[1]);
   }
 
   return (
@@ -100,14 +107,22 @@ const Table = ({ head, body, onClickHead, onClickBody, initSort }: Props) => {
             {sortedData.map((row, index) => (
               <tr
                 key={index}
-                className={`border-t border-current`}
+                className="border-t border-current"
                 onClick={onClickBody}
               >
-                {head.map((el, index) => (
-                  <td className="px-6 py-4" key={index}>
-                    {el.bodyFunc
-                      ? el.bodyFunc(row[el.value], row)
-                      : row[el.value]}
+                {head.map((el) => (
+                  <td key={el.label} className="px-6 py-4">
+                    {el.bodyFunc ? (
+                      <el.bodyFunc
+                        cellVal={row[el.value]}
+                        cellCol={el.value}
+                        rowData={row}
+                      />
+                    ) : typeof row[el.value] === "object" ? (
+                      row[el.value].toLocaleDateString()
+                    ) : (
+                      row[el.value]
+                    )}
                   </td>
                 ))}
               </tr>

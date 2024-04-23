@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import ReduxProvider from "@/lib/providers/reduxProvider";
 import TanstackProvider from "@/lib/providers/tanstackProvider";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,11 +21,9 @@ export default function RootLayout({
     <html lang="en">
       <ReduxProvider>
         <TanstackProvider>
-          <body
-            // className={`${inter.className} p-20 bg-background text-foreground w-screen h-screen`}
-            className={`${inter.className}`}
-          >
+          <body className={`${inter.className}`}>
             {children}
+            <ReactQueryDevtools initialIsOpen={false} />
           </body>
         </TanstackProvider>
       </ReduxProvider>

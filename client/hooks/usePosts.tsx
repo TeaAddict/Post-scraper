@@ -1,8 +1,37 @@
-import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import { getNewPosts, getPosts } from "@/features/post/getPosts";
+import { updatePost } from "@/features/post/updatePost";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-const usePosts = () => {
-  const query = useQuery({ queryKey: ["posts"], queryFn: getPosts });
+export const usePosts = () => {
+  return useQuery({
+    queryKey: ["posts"],
+    queryFn: getPosts,
+  });
 };
 
-export default usePosts;
+export const useGetNewPosts = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: getNewPosts,
+    onError: (e) => {
+      console.log(e);
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+  });
+};
+
+export const useUpdatePost = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updatePost,
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+  });
+};

@@ -7,7 +7,6 @@ export async function login({
 }) {
   try {
     if (!username || !password) {
-      console.log("Missing username or password");
       throw new Error("Missing username or password");
     }
 

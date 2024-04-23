@@ -3,16 +3,7 @@ import Table from "../../components/shared/table";
 import Link from "next/link";
 import { Post } from "@/utils/types/postTypes";
 import Button from "../../components/shared/button";
-import { Checkbox } from "../../components/ui/checkbox";
-
-function checkBox(value: string | boolean | number, rowData: Post) {
-  const boolVal = value === 1;
-  return (
-    <div className="flex justify-center">
-      <Checkbox id={rowData.link} className="w-6 h-6" checked={boolVal} />
-    </div>
-  );
-}
+import TableCheckBox from "./tableCheckbox";
 
 function button(value: string) {
   return (
@@ -22,14 +13,10 @@ function button(value: string) {
   );
 }
 
-function onHeadClick() {
-  // console.log("Clicked!");
-}
-
 const PostTable = ({ data }: { data: Post[] }) => {
   const header = [
-    { label: "applied", value: "applied", bodyFunc: checkBox },
-    { label: "blacklisted", value: "blacklisted", bodyFunc: checkBox },
+    { label: "applied", value: "applied", bodyFunc: TableCheckBox },
+    { label: "blacklisted", value: "blacklisted", bodyFunc: TableCheckBox },
     { label: "link", value: "link", bodyFunc: button },
     { label: "title", value: "title" },
     { label: "location", value: "location" },
@@ -39,9 +26,10 @@ const PostTable = ({ data }: { data: Post[] }) => {
     { label: "age In Days", value: "ageInDays" },
     { label: "keywords", value: "keywords" },
   ];
+
   return (
     <div className="w-full h-full">
-      <Table head={header} body={data} onClickHead={onHeadClick} />
+      <Table head={header} body={data} initSort="websiteCreatedAtDateTime" />
     </div>
   );
 };

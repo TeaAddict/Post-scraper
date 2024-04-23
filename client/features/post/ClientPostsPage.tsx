@@ -6,12 +6,23 @@ import PostSearchBar from "./postSearchBar";
 import FilterOptions from "../../components/filterOptions";
 import BlacklistedWordTable from "../../components/blacklistedWordTable";
 import LogoutButton from "@/components/logoutButton";
+import { usePosts } from "@/hooks/usePosts";
 
-const ClientPostsPage = ({ data }: { data: Post[] }) => {
+const ClientPostsPage = () => {
   const [searchVal, setSearchVal] = useState("");
+  const query = usePosts();
+  const data = (query.data as Post[]) ?? [];
 
   const filteredDataByKeyword = data.filter((post) => {
     if (!searchVal || post.keywords.includes(searchVal)) return post;
+  });
+
+  const cleanData = filteredDataByKeyword.map((val) => {
+    return {
+      ...val,
+      websiteCreatedAtDateTime: new Date(val.websiteCreatedAtDateTime),
+      ageInDays: Number(val.ageInDays),
+    };
   });
 
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -28,7 +39,7 @@ const ClientPostsPage = ({ data }: { data: Post[] }) => {
           <PostSearchBar value={searchVal} onChange={onChange} />
           <FilterOptions />
           <div className="w-full h-full">
-            <PostTable data={filteredDataByKeyword} />
+            <PostTable data={cleanData} />
           </div>
         </div>
         <BlacklistedWordTable />

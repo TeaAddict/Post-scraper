@@ -29,12 +29,10 @@ const RegisterForm = () => {
   const isLoading = isSubmitting;
 
   function onSubmit({ username, password }: FormValues) {
-    console.log("Submitting", username, password);
     registerMutation.mutate(
       { username, password },
       {
         onSuccess() {
-          console.log("Successfully registered!");
           router.push("/post");
           reset();
         },

@@ -2,11 +2,13 @@ import express from "express";
 import {
   sqlCreatePost,
   sqlDeletePost,
-  sqlGetPost,
   sqlGetPostByLink,
+  sqlGetPostByUserId,
   sqlGetPosts,
   sqlUpdatePost,
 } from "../db/post/actions.js";
+import { sqlGetUserBySessionToken } from "../db/user/actions.js";
+import { sqlGetSettingsByUserId } from "../db/settings/actions.js";
 
 export async function getPosts(req: express.Request, res: express.Response) {
   try {
@@ -33,15 +35,53 @@ export async function getPosts(req: express.Request, res: express.Response) {
   }
 }
 
-export async function getPost(req: express.Request, res: express.Response) {
-  try {
-    const { id } = req.params;
+// export async function getPost(req: express.Request, res: express.Response) {
+//   try {
+//     const { id } = req.params;
 
-    const post = await sqlGetPost(id);
-    if (!post)
+//     const post = await sqlGetPost(id);
+//     if (!post)
+//       return res.status(400).json({ error: "Problem with getting post" });
+
+//     return res.status(200).json(post);
+//   } catch (error) {
+//     console.log(error);
+//     return res.status(400).json({ error: "Problem with getting post" });
+//   }
+// }
+
+export async function getPostByUserId(
+  req: express.Request,
+  res: express.Response
+) {
+  try {
+    const sessionToken = req.cookies["USER-AUTH"];
+    if (!sessionToken)
+      return res.status(400).json({ error: "User is unauthorized" });
+
+    const user = await sqlGetUserBySessionToken(sessionToken);
+    if (!user) return res.status(400).json({ error: "User does not exist" });
+
+    const posts = await sqlGetPostByUserId(user.id.toString());
+    if (!posts)
       return res.status(400).json({ error: "Problem with getting post" });
 
-    return res.status(200).json(post);
+    const settings = await sqlGetSettingsByUserId(user.id.toString());
+    if (!settings)
+      return res.status(400).json({ error: "Problem with getting settings" });
+
+    const filteredPosts = posts.filter((post) => {
+      if (
+        (settings.appliedFilter && post.applied) ||
+        (settings.blacklistedFilter && post.blacklisted)
+      ) {
+        return;
+      } else {
+        return post;
+      }
+    });
+
+    return res.status(200).json(filteredPosts);
   } catch (error) {
     console.log(error);
     return res.status(400).json({ error: "Problem with getting post" });
@@ -69,7 +109,10 @@ export async function createPost(req: express.Request, res: express.Response) {
   }
 }
 
-export async function updatePost(req: express.Request, res: express.Response) {
+export async function updatePostById(
+  req: express.Request,
+  res: express.Response
+) {
   try {
     const { id } = req.params;
 

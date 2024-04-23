@@ -5,7 +5,7 @@ import React from "react";
 const PostPage = () => {
   return (
     <div>
-      <ClientPostsPage data={TEST_DATA} />
+      <ClientPostsPage />
     </div>
   );
 };

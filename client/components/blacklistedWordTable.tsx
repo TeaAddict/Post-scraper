@@ -1,4 +1,4 @@
-import React, { FormEvent, MouseEventHandler, useState } from "react";
+import React, { useState } from "react";
 import Table from "./shared/table";
 import InputBox from "./shared/inputBox";
 import Button from "./shared/button";
@@ -10,13 +10,6 @@ import {
 import { Blacklist } from "@/utils/types/blacklistTypes";
 import { IoMdClose } from "react-icons/io";
 import { useQueryClient } from "@tanstack/react-query";
-
-const body = [
-  {
-    nr: 1,
-    keyword: "Seniorr",
-  },
-];
 
 const BlacklistedWordTable = () => {
   const queryClient = useQueryClient();
@@ -32,7 +25,6 @@ const BlacklistedWordTable = () => {
   const [inputVal, setInputVal] = useState("");
 
   function onAdd() {
-    console.log("click", inputVal);
     addMutation.mutate(inputVal);
     setInputVal("");
   }
