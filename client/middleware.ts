@@ -4,8 +4,8 @@ import { validateToken } from "./features/auth/validateToken";
 export async function middleware(request: NextRequest) {
   const isAuthorized = await validateToken();
 
-  const url = new URL("/login", process.env.NEXT_PUBLIC_CLIENT);
   if (!isAuthorized) {
+    const url = new URL("/login", process.env.NEXT_PUBLIC_CLIENT);
     return NextResponse.redirect(url);
   }
 }

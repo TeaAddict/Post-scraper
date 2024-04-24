@@ -33,8 +33,8 @@ const RegisterForm = () => {
       { username, password },
       {
         onSuccess() {
-          router.push("/post");
           reset();
+          router.push("/post");
         },
       }
     );

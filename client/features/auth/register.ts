@@ -12,6 +12,7 @@ export async function register({
 
     const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/auth/register`, {
       method: "POST",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
     });

@@ -12,7 +12,6 @@ export async function login({
 
     const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/auth/login`, {
       method: "POST",
-      mode: "cors",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
