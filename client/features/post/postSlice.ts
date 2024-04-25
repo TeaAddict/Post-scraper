@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// TODO: remove redux
 export const postSlice = createSlice({
   name: "counter",
   initialState: {

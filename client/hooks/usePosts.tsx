@@ -1,6 +1,10 @@
-import { deletePost } from "@/features/post/deletePost";
-import { getNewPosts, getPosts } from "@/features/post/getPosts";
-import { updatePost } from "@/features/post/updatePost";
+import {
+  deletePost,
+  getNewPosts,
+  getPosts,
+  updatePost,
+} from "@/features/post/postActions";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const usePosts = () => {
