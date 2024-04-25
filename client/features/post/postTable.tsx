@@ -1,9 +1,9 @@
 import React from "react";
-import Table from "../../components/shared/table";
+import Table from "@/components/shared/Table";
 import Link from "next/link";
 import { Post } from "@/utils/types/postTypes";
-import Button from "../../components/shared/button";
-import TableCheckBox from "./tableCheckbox";
+import Button from "../../components/shared/Button";
+import TableCheckBox from "./TableCheckbox";
 
 function button(value: string) {
   return (
@@ -28,7 +28,7 @@ const PostTable = ({ data }: { data: Post[] }) => {
   ];
 
   return (
-    <div className="w-full h-full">
+    <div className="">
       <Table head={header} body={data} initSort="websiteCreatedAtDateTime" />
     </div>
   );

@@ -22,7 +22,7 @@ const Button = ({
 
   return (
     <button
-      className={`border-2 ${variations[variation]} transition-all duration-300 rounded-md px-1 py-1`}
+      className={`border-2 ${variations[variation]} flex justify-center transition-all duration-300 rounded-md min-w-16 px-1 py-1 disabled:bg-background disabled:text-gray-400 disabled:border-gray-400`}
       onClick={(e) => onClick?.()}
       type={type}
       disabled={disabled}

@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "./shared/button";
+import Button from "./shared/Button";
 import { deleteCookie } from "@/utils/helpers";
 import { useRouter } from "next/navigation";
 

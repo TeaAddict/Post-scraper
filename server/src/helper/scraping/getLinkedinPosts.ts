@@ -1,6 +1,6 @@
 import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
-import { getAgeInDays, getIp } from "../helpers";
+import { getAgeInDays, getIp, sleep } from "../helpers";
 
 function addUrlParams(webUrl: string, keywords: string, location: string) {
   const url = new URL(webUrl);
@@ -22,11 +22,14 @@ export async function getLinkedinPosts(
     const cleanUrl = addUrlParams(websiteUrl, keywords, location);
 
     const currentIp = await getIp();
-    if (currentIp === process.env.MY_IP) return console.log("Hide ip!");
+    if (currentIp === process.env.MY_IP) {
+      console.log("Hide ip!");
+      return "hide ip";
+    }
 
     const browser = await puppeteer
       .use(StealthPlugin())
-      .launch({ headless: true });
+      .launch({ headless: false });
 
     const page = await browser.newPage();
     await page.goto(cleanUrl);
@@ -73,9 +76,8 @@ export async function getLinkedinPosts(
       cleanUrl,
       keywords
     );
-    if (!jobPosts.length) {
-      console.log("Empty arr, send request again in 5 seconds");
-    }
+    if (!jobPosts.length) return;
+
     await browser.close();
 
     const jobPostsWithAge = jobPosts.map((post) => {
@@ -84,6 +86,32 @@ export async function getLinkedinPosts(
     });
 
     return jobPostsWithAge;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getWebsitePosts(
+  keywords: string,
+  location: string,
+  pages: number = 1,
+  retries: number = 5,
+  sleepDuration: number = 10
+) {
+  try {
+    for (let i = 1; i !== retries + 1; i++) {
+      console.log("Loop num:", i);
+      const posts = await getLinkedinPosts(keywords, location, pages);
+
+      if (posts === "hide ip") {
+        return;
+      } else if (posts === undefined || !posts.length) {
+        console.log("Empty arr, send request again in 5 seconds");
+        await sleep(sleepDuration * 1000);
+      } else {
+        return posts;
+      }
+    }
   } catch (error) {
     console.log(error);
   }

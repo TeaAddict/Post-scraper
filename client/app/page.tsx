@@ -1,10 +1,16 @@
-import { validateToken } from "@/features/auth/validateToken";
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const MainPage = () => {
-  return (
-    // <main className="w-full h-full">
-    <main></main>
-  );
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("/post");
+  }, [router]);
+
+  return <main></main>;
 };
 
 export default MainPage;

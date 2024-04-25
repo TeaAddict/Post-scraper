@@ -1,6 +1,7 @@
 "use client";
-import Button from "@/components/shared/button";
-import InputBox from "@/components/shared/inputBox";
+
+import Button from "@/components/shared/Button";
+import InputBox from "@/components/shared/InputBox";
 import { useLoginMutation } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 

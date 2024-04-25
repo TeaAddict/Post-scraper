@@ -1,7 +1,7 @@
 CREATE TABLE post (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     title VARCHAR(255) NOT NULL,
-    link VARCHAR(255) NOT NULL,
+    link VARCHAR(500) NOT NULL,
     ageInDays VARCHAR(255) NOT NULL,
     companyName VARCHAR(255) NOT NULL,
     location VARCHAR(255),

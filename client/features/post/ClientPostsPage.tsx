@@ -1,11 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import { Post } from "@/utils/types/postTypes";
-import PostTable from "./postTable";
-import PostSearchBar from "./postSearchBar";
-import FilterOptions from "../../components/filterOptions";
-import BlacklistedWordTable from "../../components/blacklistedWordTable";
-import LogoutButton from "@/components/logoutButton";
+import PostTable from "./PostTable";
+import PostSearchBar from "./PostSearchBar";
+import FilterOptions from "@/components/FilterOptions";
+import BlacklistedWordTable from "@/components/BlacklistedWordTable";
+import LogoutButton from "@/components/LogoutButton";
 import { usePosts } from "@/hooks/usePosts";
 
 const ClientPostsPage = () => {
@@ -30,17 +30,26 @@ const ClientPostsPage = () => {
   }
 
   return (
-    <div className="p-14 rounded-sm bg-card w-screen h-screen flex flex-col gap-4">
-      <div className="flex justify-end">
+    <div className="p-20 rounded-sm bg-card w-screen h-screen flex flex-col gap-4">
+      {/* <div className="flex justify-end">
         <LogoutButton />
       </div>
-      <div className="flex flex-row gap-4">
+
+      <div className="flex flex-row  gap-4">
         <div className="flex flex-col gap-4 ">
           <PostSearchBar value={searchVal} onChange={onChange} />
           <FilterOptions />
-          <div className="w-full h-full">
-            <PostTable data={cleanData} />
-          </div>
+        </div>
+      </div>
+
+      <div className="flex max-h-full">
+        <div className="  overflow-auto">
+          <PostTable data={cleanData} />
+        </div>
+      </div> */}
+      <div className="flex h-full w-full">
+        <div className="h-full w-full overflow-auto">
+          <PostTable data={cleanData} />
         </div>
         <BlacklistedWordTable />
       </div>

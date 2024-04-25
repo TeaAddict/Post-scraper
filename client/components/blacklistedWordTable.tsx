@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Table from "./shared/table";
-import InputBox from "./shared/inputBox";
-import Button from "./shared/button";
+import Table from "./shared/Table";
+import InputBox from "./shared/InputBox";
+import Button from "./shared/Button";
 import {
   useAddToBlacklist,
   useBlacklist,
@@ -68,7 +68,7 @@ const BlacklistedWordTable = () => {
   }
 
   return (
-    <div className="flex flex-col flex-shrink p-2 border-2 gap-3 max-h-fit">
+    <div className="flex flex-col p-2 border-2 gap-3">
       <p>Blacklisted keywords</p>
       <div className="flex gap-4">
         <div className="flex-1">
@@ -80,7 +80,11 @@ const BlacklistedWordTable = () => {
           </Button>
         </div>
       </div>
-      {keywords && <Table head={head} body={keywords} />}
+      {keywords && (
+        <div className="h-full overflow-auto">
+          <Table head={head} body={keywords} />
+        </div>
+      )}
     </div>
   );
 };

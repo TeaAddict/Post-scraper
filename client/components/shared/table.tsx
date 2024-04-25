@@ -85,58 +85,51 @@ const Table = ({ head, body, onClickBody, initSort }: Props) => {
     ascDesc(head, sortVal, setSortVal);
   }
 
+  // Needs w-full h-full on parent containers + overflow-auto,
+  // idk why it cant just inherit parent size and overflow...
+  // I pray for any soul that has to deal with tables
   return (
-    <ScrollArea className="pb-5 w-full h-full overflow-auto" type="always">
-      <ScrollAreaViewport className="w-full h-full">
-        <table className="text-left text-base">
-          <thead className="uppercase">
-            <tr className="border-b-4 border-current">
-              {head.map((el) => (
-                <th
-                  className={`px-6 py-3 hover:bg-white/10 transition-all duration-300 cursor-pointer`}
-                  onClick={() => handleHead(el.value)}
-                  key={el.value}
-                >
-                  {el.value === "empty" ? "" : el.label}
-                </th>
-              ))}
-            </tr>
-          </thead>
+    <table className="  text-left  text-base">
+      <thead className="sticky top-0 uppercase">
+        <tr className=" border-b-4 border-current">
+          {head.map((el) => (
+            <th
+              className={`bg-card-lighter border-b-4 px-6 py-3 hover:bg-primary transition-all duration-300 cursor-pointer`}
+              onClick={() => handleHead(el.value)}
+              key={el.value}
+            >
+              {el.value === "empty" ? "" : el.label}
+            </th>
+          ))}
+        </tr>
+      </thead>
 
-          <tbody>
-            {sortedData.map((row, index) => (
-              <tr
-                key={index}
-                className="border-t border-current"
-                onClick={onClickBody}
-              >
-                {head.map((el) => (
-                  <td key={el.label} className="px-6 py-4">
-                    {el.bodyFunc ? (
-                      <el.bodyFunc
-                        cellVal={row[el.value]}
-                        cellCol={el.value}
-                        rowData={row}
-                      />
-                    ) : typeof row[el.value] === "object" ? (
-                      row[el.value].toLocaleDateString()
-                    ) : (
-                      row[el.value]
-                    )}
-                  </td>
-                ))}
-              </tr>
+      <tbody className="">
+        {sortedData.map((row, index) => (
+          <tr
+            key={index}
+            className=" border-t border-current"
+            onClick={onClickBody}
+          >
+            {head.map((el) => (
+              <td key={el.label} className=" px-6 py-4">
+                {el.bodyFunc ? (
+                  <el.bodyFunc
+                    cellVal={row[el.value]}
+                    cellCol={el.value}
+                    rowData={row}
+                  />
+                ) : typeof row[el.value] === "object" ? (
+                  row[el.value].toLocaleDateString()
+                ) : (
+                  row[el.value]
+                )}
+              </td>
             ))}
-          </tbody>
-        </table>
-      </ScrollAreaViewport>
-      <ScrollAreaScrollbar orientation="vertical">
-        <ScrollAreaThumb className="border-2 rounded-md" />
-      </ScrollAreaScrollbar>
-      <ScrollAreaScrollbar orientation="horizontal">
-        <ScrollAreaThumb className="border-2 rounded-md" />
-      </ScrollAreaScrollbar>
-    </ScrollArea>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 };
 
