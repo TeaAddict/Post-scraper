@@ -31,27 +31,25 @@ const ClientPostsPage = () => {
 
   return (
     <div className="p-20 rounded-sm bg-card w-screen h-screen flex flex-col gap-4">
-      {/* <div className="flex justify-end">
-        <LogoutButton />
-      </div>
+      <div className="flex flex-col w-full h-full gap-4">
+        <div className="flex flex-col">
+          <div className="flex justify-between">
+            <div className="flex flex-col gap-4">
+              <PostSearchBar value={searchVal} onChange={onChange} />
+              <FilterOptions />
+            </div>
+            <div className="flex items-center">
+              <LogoutButton />
+            </div>
+          </div>
+        </div>
 
-      <div className="flex flex-row  gap-4">
-        <div className="flex flex-col gap-4 ">
-          <PostSearchBar value={searchVal} onChange={onChange} />
-          <FilterOptions />
+        <div className="flex h-[90%] w-full gap-5">
+          <div className="h-full w-full overflow-auto">
+            <PostTable data={cleanData} />
+          </div>
+          <BlacklistedWordTable />
         </div>
-      </div>
-
-      <div className="flex max-h-full">
-        <div className="  overflow-auto">
-          <PostTable data={cleanData} />
-        </div>
-      </div> */}
-      <div className="flex h-full w-full">
-        <div className="h-full w-full overflow-auto">
-          <PostTable data={cleanData} />
-        </div>
-        <BlacklistedWordTable />
       </div>
     </div>
   );

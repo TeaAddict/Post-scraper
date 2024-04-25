@@ -55,7 +55,7 @@ const BlacklistedWordTable = () => {
         rowData: Blacklist;
       }) => {
         return (
-          <Button onClick={() => onDelete(rowData.keyword)}>
+          <Button onClick={() => onDelete(rowData.keyword)} variation="square">
             <IoMdClose size={20} />
           </Button>
         );

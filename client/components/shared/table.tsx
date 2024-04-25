@@ -89,7 +89,7 @@ const Table = ({ head, body, onClickBody, initSort }: Props) => {
   // idk why it cant just inherit parent size and overflow...
   // I pray for any soul that has to deal with tables
   return (
-    <table className="  text-left  text-base">
+    <table className="text-left text-base">
       <thead className="sticky top-0 uppercase">
         <tr className=" border-b-4 border-current">
           {head.map((el) => (
@@ -104,7 +104,7 @@ const Table = ({ head, body, onClickBody, initSort }: Props) => {
         </tr>
       </thead>
 
-      <tbody className="">
+      <tbody>
         {sortedData.map((row, index) => (
           <tr
             key={index}

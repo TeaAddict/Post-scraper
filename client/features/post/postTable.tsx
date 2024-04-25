@@ -28,7 +28,7 @@ const PostTable = ({ data }: { data: Post[] }) => {
   ];
 
   return (
-    <div className="">
+    <div>
       <Table head={header} body={data} initSort="websiteCreatedAtDateTime" />
     </div>
   );
