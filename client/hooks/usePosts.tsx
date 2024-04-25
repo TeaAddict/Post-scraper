@@ -1,3 +1,4 @@
+import { deletePost } from "@/features/post/deletePost";
 import { getNewPosts, getPosts } from "@/features/post/getPosts";
 import { updatePost } from "@/features/post/updatePost";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -29,6 +30,19 @@ export const useUpdatePost = () => {
     mutationFn: updatePost,
     onError: (error) => {
       console.log(error.message);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+  });
+};
+
+export const useDeletePost = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deletePost,
+    onError: (error) => {
+      console.log(error);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });

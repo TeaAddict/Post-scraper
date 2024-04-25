@@ -130,6 +130,7 @@ export async function updatePostById(
 export async function deletePost(req: express.Request, res: express.Response) {
   try {
     const { id } = req.params;
+
     const post = await sqlDeletePost(Number(id));
     if (!post)
       return res.status(400).json({ error: "Problem with deleting post" });

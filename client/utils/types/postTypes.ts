@@ -1,5 +1,7 @@
 // Commented properties are gotten property types from server (before converting it in client for table sorting)
 
+import { FC } from "react";
+
 export type Post = {
   title: string;
   link: string;
