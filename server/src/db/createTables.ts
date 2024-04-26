@@ -1,9 +1,10 @@
 import fs from "fs/promises";
 import mysql from "mysql2/promise";
+import { TableData } from "../Types/generalTypes";
 
-export async function createTables(tableNames: string[]) {
+export async function createTables(tableNames: TableData[]) {
   try {
-    console.log("Missing tables:", tableNames);
+    tableNames.forEach((table) => console.log("Missing table:", table.name));
 
     const connection = await mysql.createConnection({
       host: process.env.MYSQL_HOST,
@@ -14,12 +15,9 @@ export async function createTables(tableNames: string[]) {
 
     await Promise.all(
       tableNames.map(async (table) => {
-        const query = await fs.readFile(
-          `src/db/${table}/${table}.sql`,
-          "utf-8"
-        );
+        const query = await fs.readFile(table.location, "utf-8");
         await connection.query(query);
-        console.log(`Created ${table} table`);
+        console.log(`Created ${table.name} table`);
       })
     );
 

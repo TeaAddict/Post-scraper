@@ -6,7 +6,7 @@ import {
   sqlUpdateUser,
 } from "../db/user/actions.js";
 import { createHash, random } from "../helper/authHelpers.js";
-import { sqlCreateSettings } from "../db/settings/actions.js";
+import { sqlCreateSettings } from "../db/settings/settingsActions.js";
 
 export async function login(req: express.Request, res: express.Response) {
   try {

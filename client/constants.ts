@@ -1,3 +1,26 @@
+export const jobType = [
+  { value: "fullTime", label: "Full-time" },
+  { value: "partTime", label: "Part-time" },
+];
+export const experienceLevel = [
+  { value: "internship", label: "Internship" },
+  { value: "entryLevel", label: "Entry level" },
+  { value: "midSeniorLevel", label: "Mid-Senior level" },
+  { value: "director", label: "Director" },
+  { value: "executive", label: "Executive" },
+];
+export const age = [
+  { value: "any", label: "Any" },
+  { value: "pastMonth", label: "Past month" },
+  { value: "pastWeek", label: "Past week" },
+  { value: "past24Hours", label: "Past 24 hours" },
+];
+export const remote = [
+  { value: "onSite", label: "On-site" },
+  { value: "hybrid", label: "Hybrid" },
+  { value: "remote", label: "Remote" },
+];
+
 export const TEST_DATA = [
   {
     title: "Frontend Developer",

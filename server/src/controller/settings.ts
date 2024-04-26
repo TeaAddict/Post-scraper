@@ -2,7 +2,7 @@ import express from "express";
 import {
   sqlGetSettingsByUserId,
   sqlUpdateSettings,
-} from "../db/settings/actions";
+} from "../db/settings/settingsActions";
 
 export async function getSettings(req: express.Request, res: express.Response) {
   try {

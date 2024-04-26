@@ -1,6 +1,7 @@
 import mysql from "mysql2/promise";
+import { TableData } from "../Types/generalTypes";
 
-export async function getMissingTables(tableNames: string[]) {
+export async function getMissingTables(tableNames: TableData[]) {
   try {
     const connection = await mysql.createConnection({
       host: process.env.MYSQL_HOST,
@@ -9,7 +10,7 @@ export async function getMissingTables(tableNames: string[]) {
       database: process.env.MYSQL_DB,
     });
 
-    let nonExistantTables: string[] = [];
+    let nonExistantTables: TableData[] = [];
     const [tables, metaData] = await connection.query(`SHOW TABLES`);
     const existingTables: string[] = (tables as []).map(
       (val) => val[`Tables_in_${process.env.MYSQL_DB}`]
@@ -17,7 +18,7 @@ export async function getMissingTables(tableNames: string[]) {
     connection.end();
 
     tableNames.forEach((name) => {
-      if (!existingTables.includes(name)) nonExistantTables.push(name);
+      if (!existingTables.includes(name.name)) nonExistantTables.push(name);
     });
 
     if (nonExistantTables.length) {

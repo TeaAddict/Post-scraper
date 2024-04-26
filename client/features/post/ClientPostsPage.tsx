@@ -7,6 +7,7 @@ import FilterOptions from "@/components/FilterOptions";
 import BlacklistedWordTable from "@/components/BlacklistedWordTable";
 import LogoutButton from "@/components/LogoutButton";
 import { usePosts } from "@/hooks/usePosts";
+import Settings from "../settings/Settings";
 
 const ClientPostsPage = () => {
   const [searchVal, setSearchVal] = useState("");
@@ -30,21 +31,20 @@ const ClientPostsPage = () => {
   }
 
   return (
-    <div className="p-20 rounded-sm bg-card w-screen h-screen flex flex-col gap-4">
-      <div className="flex flex-col w-full h-full gap-4">
-        <div className="flex flex-col">
-          <div className="flex justify-between">
-            <div className="flex flex-col gap-4">
-              <PostSearchBar value={searchVal} onChange={onChange} />
-              <FilterOptions />
-            </div>
-            <div className="flex items-center">
-              <LogoutButton />
-            </div>
+    <div className="p-20 rounded-sm bg-card  flex flex-col gap-4">
+      <Settings />
+      <div className="flex flex-col gap-4">
+        <div className="flex justify-between">
+          <div className="flex flex-col gap-4">
+            <PostSearchBar value={searchVal} onChange={onChange} />
+            <FilterOptions />
+          </div>
+          <div className="flex items-center">
+            <LogoutButton />
           </div>
         </div>
 
-        <div className="flex h-[90%] w-full gap-5">
+        <div className="flex h-[70vh] w-full">
           <div className="h-full w-full overflow-auto">
             <PostTable data={cleanData} />
           </div>

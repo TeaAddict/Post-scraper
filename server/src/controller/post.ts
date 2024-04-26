@@ -8,7 +8,7 @@ import {
   sqlUpdatePost,
 } from "../db/post/actions.js";
 import { sqlGetUserBySessionToken } from "../db/user/actions.js";
-import { sqlGetSettingsByUserId } from "../db/settings/actions.js";
+import { sqlGetSettingsByUserId } from "../db/settings/settingsActions.js";
 
 export async function getPosts(req: express.Request, res: express.Response) {
   try {

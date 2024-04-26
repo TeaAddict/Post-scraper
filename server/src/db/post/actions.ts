@@ -24,7 +24,7 @@ export async function sqlGetPostById(id: number) {
 export async function sqlGetPostByUserId(id: number) {
   try {
     const [result, meta] = await pool.query(
-      "SELECT * FROM post WHERE userId = ?",
+      "SELECT * FROM post WHERE user_id = ?",
       [id]
     );
     return result as Post[];
@@ -39,7 +39,7 @@ export async function sqlCreatePost(id: number, post: Post) {
     const preparedPlaceholder = Array(propertyCount + 1)
       .fill("?")
       .join(", ");
-    const columns = [...Object.keys(post), "userId"];
+    const columns = [...Object.keys(post), "user_id"];
     const queryString = `INSERT INTO post (${columns}) VALUES (${preparedPlaceholder})`;
     const preparedValues = [...Object.values(post), id];
     const [result, meta] = await pool.query(queryString, preparedValues);

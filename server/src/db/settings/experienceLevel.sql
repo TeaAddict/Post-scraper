@@ -1,0 +1,13 @@
+CREATE TABLE experience_level (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    internship BOOLEAN NOT NULL DEFAULT 0,
+    entry_level BOOLEAN NOT NULL DEFAULT 0,
+    mid_senior_level BOOLEAN NOT NULL DEFAULT 0,
+    director BOOLEAN NOT NULL DEFAULT 0,
+    executive BOOLEAN NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    settings_id INT,
+    FOREIGN KEY (settings_id) REFERENCES settings(id) ON DELETE CASCADE,
+    UNIQUE(settings_id)
+)

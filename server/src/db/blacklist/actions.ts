@@ -4,7 +4,7 @@ import pool from "../index";
 export async function sqlGetKeywords(userId: number) {
   try {
     const [result, meta] = await pool.query(
-      "SELECT * FROM blacklist WHERE userId = ?",
+      "SELECT * FROM blacklist WHERE user_id = ?",
       [userId]
     );
     if (!result) throw new Error("Problem with getting blacklisted keyword");
@@ -31,7 +31,7 @@ export async function sqlGetKeyword(keyword: string) {
 export async function sqlAddToBlacklist(keyword: string, userId: number) {
   try {
     const [result, meta] = await pool.query(
-      "INSERT INTO blacklist (keyword, userId) VALUES (?, ?)",
+      "INSERT INTO blacklist (keyword, user_id) VALUES (?, ?)",
       [keyword, userId]
     );
     if ((result as { insertId: number })["insertId"] === 0) return false;

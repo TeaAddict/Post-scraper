@@ -15,3 +15,10 @@ export function getAgeInDays(date: string) {
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   return diffDays;
 }
+
+export function camelCaseToSnakeCase(camelCasedWord: string) {
+  return camelCasedWord.replace(
+    /[A-Z]/g,
+    (letter) => `_${letter.toLowerCase()}`
+  );
+}

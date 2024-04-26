@@ -1,6 +1,18 @@
 export const MAX_AGE = 20;
 
-export const TABLE_LIST = ["user", "post", "blacklist", "settings"];
+// export const TABLE_LIST = ["user", "post", "blacklist", "settings"];
+export const TABLE_LIST = [
+  { name: "user", location: "src/db/user/user.sql" },
+  { name: "post", location: "src/db/post/post.sql" },
+  { name: "blacklist", location: "src/db/blacklist/blacklist.sql" },
+  { name: "settings", location: "src/db/settings/settings.sql" },
+  { name: "jobType", location: "src/db/settings/jobType.sql" },
+  {
+    name: "experienceLevel",
+    location: "src/db/settings/experienceLevel.sql",
+  },
+  { name: "remote", location: "src/db/settings/remote.sql" },
+];
 
 export const CLEAN_DATA = [
   {

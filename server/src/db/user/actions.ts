@@ -106,7 +106,7 @@ export async function sqlGetUserByUsername(username: string) {
 export async function sqlGetUserBySessionToken(sessionToken: string) {
   try {
     const [result, meta] = await pool.query(
-      "SELECT * FROM user WHERE sessionToken = ?",
+      "SELECT * FROM user WHERE session_token = ?",
       sessionToken
     );
     const cleanRes = (result as {}[])[0] as UserT;

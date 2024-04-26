@@ -4,13 +4,18 @@ import { createDb } from "./createDb.js";
 import { getMissingTables } from "./getMissingTables.js";
 import { createTables } from "./createTables.js";
 import { TABLE_LIST } from "../contants.js";
+import { camelCaseToSnakeCase } from "../helper/helpers.js";
 
 async function createPool() {
   try {
     const database = await databaseExists();
     if (!database) createDb();
 
-    const missingTables = await getMissingTables(TABLE_LIST);
+    const snakeCasedTableList = TABLE_LIST.map((table) => ({
+      ...table,
+      name: camelCaseToSnakeCase(table.name),
+    }));
+    const missingTables = await getMissingTables(snakeCasedTableList);
     if (missingTables) createTables(missingTables);
 
     const pool = mysql2.createPool({
