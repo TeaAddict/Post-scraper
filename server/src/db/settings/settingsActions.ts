@@ -1,7 +1,9 @@
 import { formatInputForUpdate } from "../../helper/updateHelper";
 import { FullSettings, Settings } from "../../Types/settingsTypes";
 import pool from "../index";
-import { sqlCreateSettingsExperienceLevel } from "./experienceLevelActions";
+import { sqlCreateExperienceLevelSettings } from "./experienceLevelActions";
+import { sqlCreateJobTypeSettings } from "./jobTypeActions";
+import { sqlCreateRemoteSettings } from "./remoteActions";
 
 export async function sqlGetSettingsByUserId(userId: number) {
   try {
@@ -37,17 +39,15 @@ export async function sqlCreateSettings(userId: number) {
     const settings = await sqlGetSettingsByUserId(userId);
     if (!settings) return false;
 
-    await sqlCreateSettingsExperienceLevel(settings.id);
+    await sqlCreateExperienceLevelSettings(settings.id);
+    await sqlCreateJobTypeSettings(settings.id);
+    await sqlCreateRemoteSettings(settings.id);
 
     return settings;
   } catch (error) {
     console.log(error);
   }
 }
-
-// appliedFilter: boolean;
-// blacklistedFilter: boolean;
-// userId: number;
 
 export async function sqlUpdateSettings(userId: number, data: Settings) {
   try {

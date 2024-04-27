@@ -1,14 +1,14 @@
 import pool from "../index";
 import { sqlGetSettingsBySettingsId } from "./settingsActions";
 
-export async function sqlCreateExperienceLevelSettings(settingsId: number) {
+export async function sqlCreateJobTypeSettings(settingsId: number) {
   try {
     const [result, meta] = await pool.query(
-      "INSERT INTO experience_level (settings_id) VALUES (?)",
+      "INSERT INTO job_type (settings_id) VALUES (?)",
       settingsId
     );
     if (!result || (result as { insertId: number }).insertId === 0) {
-      console.log("Problem creating experienceLevel settings");
+      console.log("Problem creating jobType settings");
       return false;
     }
 
@@ -21,10 +21,10 @@ export async function sqlCreateExperienceLevelSettings(settingsId: number) {
   }
 }
 
-export async function sqlGetExperienceLevelBySettingsId(settingsId: number) {
+export async function sqlGetJobTypeBySettingsId(settingsId: number) {
   try {
     const [result, meta] = await pool.query(
-      "SELECT * FROM experience_level WHERE settings_id = ?",
+      "SELECT * FROM job_type WHERE settings_id = ?",
       settingsId
     );
     console.log(result);
