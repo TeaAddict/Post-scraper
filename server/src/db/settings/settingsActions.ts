@@ -3,6 +3,7 @@ import { FullSettings, Settings } from "../../Types/settingsTypes";
 import pool from "../index";
 import { sqlCreateExperienceLevelSettings } from "./experienceLevelActions";
 import { sqlCreateJobTypeSettings } from "./jobTypeActions";
+import { sqlCreatePostAgeSettings } from "./postAgeActions";
 import { sqlCreateRemoteSettings } from "./remoteActions";
 
 export async function sqlGetSettingsByUserId(userId: number) {
@@ -39,6 +40,7 @@ export async function sqlCreateSettings(userId: number) {
     const settings = await sqlGetSettingsByUserId(userId);
     if (!settings) return false;
 
+    await sqlCreatePostAgeSettings(settings.id);
     await sqlCreateExperienceLevelSettings(settings.id);
     await sqlCreateJobTypeSettings(settings.id);
     await sqlCreateRemoteSettings(settings.id);

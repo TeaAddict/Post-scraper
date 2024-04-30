@@ -1,18 +1,18 @@
-import { ExperienceLevel } from "../../Types/settingsTypes";
+import { PostAge } from "../../Types/settingsTypes";
 import pool from "../index";
 import {
   sqlGetSettingsBySettingsId,
   sqlGetSettingsByUserId,
 } from "./settingsActions";
 
-export async function sqlCreateExperienceLevelSettings(settingsId: number) {
+export async function sqlCreatePostAgeSettings(settingsId: number) {
   try {
     const [result, meta] = await pool.query(
-      "INSERT INTO experience_level (settings_id) VALUES (?)",
+      "INSERT INTO post_age (settings_id) VALUES (?)",
       settingsId
     );
     if (!result || (result as { insertId: number }).insertId === 0) {
-      console.log("Problem creating experienceLevel settings");
+      console.log("Problem creating post_age settings");
       return false;
     }
 
@@ -25,30 +25,28 @@ export async function sqlCreateExperienceLevelSettings(settingsId: number) {
   }
 }
 
-export async function sqlGetExperienceLevelBySettingsId(settingsId: number) {
+export async function sqlGetPostAgeBySettingsId(settingsId: number) {
   try {
     const [result, meta] = await pool.query(
-      "SELECT * FROM experience_level WHERE settings_id = ?",
+      "SELECT * FROM post_age WHERE settings_id = ?",
       settingsId
     );
-    const experienceLevelSettings = (result as {}[])[0] as ExperienceLevel;
-    return experienceLevelSettings;
+    const ageSettings = (result as {}[])[0] as PostAge;
+    return ageSettings;
   } catch (error) {
     console.log(error);
   }
 }
 
-export async function sqlGetExperienceLevelByUserId(userId: number) {
+export async function sqlGetPostAgeByUserId(userId: number) {
   try {
     const settings = await sqlGetSettingsByUserId(userId);
     if (!settings) return;
 
-    const experienceLevel = await sqlGetExperienceLevelBySettingsId(
-      settings.id
-    );
-    if (!experienceLevel) return;
+    const ageSettings = await sqlGetPostAgeBySettingsId(settings.id);
+    if (!ageSettings) return;
 
-    return experienceLevel;
+    return ageSettings;
   } catch (error) {
     console.log(error);
   }

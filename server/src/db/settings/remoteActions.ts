@@ -1,5 +1,9 @@
+import { Remote } from "../../Types/settingsTypes";
 import pool from "../index";
-import { sqlGetSettingsBySettingsId } from "./settingsActions";
+import {
+  sqlGetSettingsBySettingsId,
+  sqlGetSettingsByUserId,
+} from "./settingsActions";
 
 export async function sqlCreateRemoteSettings(settingsId: number) {
   try {
@@ -28,8 +32,22 @@ export async function sqlGetRemoteBySettingsId(settingsId: number) {
       "SELECT * FROM remote WHERE settings_id = ?",
       settingsId
     );
-    console.log(result);
-    return result;
+    const remoteSettings = (result as {}[])[0] as Remote;
+    return remoteSettings;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function sqlGetRemoteByUserId(userId: number) {
+  try {
+    const settings = await sqlGetSettingsByUserId(userId);
+    if (!settings) return;
+
+    const remote = await sqlGetRemoteBySettingsId(settings.id);
+    if (!remote) return;
+
+    return remote;
   } catch (error) {
     console.log(error);
   }

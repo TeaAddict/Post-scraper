@@ -1,5 +1,9 @@
+import { JobType } from "../../Types/settingsTypes";
 import pool from "../index";
-import { sqlGetSettingsBySettingsId } from "./settingsActions";
+import {
+  sqlGetSettingsBySettingsId,
+  sqlGetSettingsByUserId,
+} from "./settingsActions";
 
 export async function sqlCreateJobTypeSettings(settingsId: number) {
   try {
@@ -27,8 +31,22 @@ export async function sqlGetJobTypeBySettingsId(settingsId: number) {
       "SELECT * FROM job_type WHERE settings_id = ?",
       settingsId
     );
-    console.log(result);
-    return result;
+    const jobTypeSettings = (result as {}[])[0] as JobType;
+    return jobTypeSettings;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function sqlGetJobTypeByUserId(userId: number) {
+  try {
+    const settings = await sqlGetSettingsByUserId(userId);
+    if (!settings) return;
+
+    const jobType = await sqlGetJobTypeBySettingsId(settings.id);
+    if (!jobType) return;
+
+    return jobType;
   } catch (error) {
     console.log(error);
   }
