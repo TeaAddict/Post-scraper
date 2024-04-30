@@ -8,7 +8,7 @@ type Props = {
   defaultActive?: { value: string; label: string }[];
   onSave?: Function;
   name?: string;
-  type?: "radio" | "checkbox";
+  type: "radio" | "checkbox";
   width?: string;
 };
 
@@ -16,14 +16,15 @@ const Select = ({
   options,
   defaultActive,
   onSave,
-  type = "radio",
+  type,
   name,
   width = "7rem",
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [active, setActive] = useState(
-    defaultActive ?? type === "radio" ? [options[0]] : []
+    defaultActive ? defaultActive : type === "radio" ? [options[0]] : []
   );
+
   const ref = useRef<HTMLDivElement>(null);
 
   function handleRadioChange(e: React.FormEvent<HTMLDivElement>) {

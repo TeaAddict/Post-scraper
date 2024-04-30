@@ -1,6 +1,6 @@
 export const jobType = [
-  { value: "fullTime", label: "Full-time" },
-  { value: "partTime", label: "Part-time" },
+  { value: "full_time", label: "Full-time" },
+  { value: "part_time", label: "Part-time" },
 ];
 export const experienceLevel = [
   { value: "internship", label: "Internship" },
