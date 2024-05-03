@@ -30,7 +30,7 @@ const PostTable = ({ data }: { data: Post[] }) => {
     { label: "title", value: "title" },
     { label: "location", value: "location" },
     { label: "company Name", value: "companyName" },
-    { label: "website Created At DateTime", value: "websiteCreatedAtDateTime" },
+    { label: "website Created At Datetime", value: "websiteCreatedAtDatetime" },
     { label: "website Created At String", value: "websiteCreatedAtString" },
     { label: "age In Days", value: "ageInDays" },
     { label: "keywords", value: "keywords" },
@@ -59,7 +59,7 @@ const PostTable = ({ data }: { data: Post[] }) => {
 
   return (
     <div>
-      <Table head={header} body={data} initSort="websiteCreatedAtDateTime" />
+      <Table head={header} body={data} initSort="websiteCreatedAtDatetime" />
     </div>
   );
 };

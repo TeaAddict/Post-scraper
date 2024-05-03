@@ -22,3 +22,13 @@ export function camelCaseToSnakeCase(camelCasedWord: string) {
     (letter) => `_${letter.toLowerCase()}`
   );
 }
+
+export function objKeysCamelToSnake(obj: {
+  [key: string]: string | boolean | number;
+}) {
+  const snakeCased: { [key: string]: string | boolean | number } = {};
+  Object.keys(obj).forEach(
+    (val) => (snakeCased[camelCaseToSnakeCase(val)] = obj[val])
+  );
+  return snakeCased;
+}

@@ -3,7 +3,7 @@ export type Post = {
   link: string;
   location: string;
   companyName: string;
-  websiteCreatedAtDateTime: string;
+  websiteCreatedAtDatetime: string;
   websiteCreatedAtString: string;
   ageInDays: number;
   keywords: string;
@@ -19,7 +19,7 @@ export type DbPost = {
   companyName: string;
   location: string;
   applied: number;
-  websiteCreatedAtDateTime: string;
+  websiteCreatedAtDatetime: string;
   websiteCreatedAtString: string;
   keywords: string;
   blacklisted: number;

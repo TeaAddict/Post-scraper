@@ -4,6 +4,9 @@ import { sqlGetUserById } from "../db/user/actions";
 import { sqlGetKeywords } from "../db/blacklist/actions";
 import { getWebsitePosts } from "../helper/scraping/getLinkedinPosts";
 import { filterPosts } from "../utils/filterByTitle";
+import { TEST_DATA1 } from "../contants";
+import { objKeysCamelToSnake } from "../helper/helpers";
+import { Post } from "../Types/postTypes";
 
 export async function getPosts(req: express.Request, res: express.Response) {
   try {
@@ -23,15 +26,16 @@ export async function getPosts(req: express.Request, res: express.Response) {
         .json({ error: "Problem with getting blacklisted keywords" });
     const cleanBlackList = blacklistedKeywords.map((val) => val.keyword);
 
-    const unfilteredPosts = await getWebsitePosts(keyword, location);
+    // const unfilteredPosts = await getWebsitePosts(keyword, location);
+    const unfilteredPosts = TEST_DATA1;
     if (!unfilteredPosts)
       return res.status(400).json({ error: "Problem with scraper" });
 
-    const cleanPosts = filterPosts(
-      unfilteredPosts,
-      cleanBlackList,
-      MAX_AGE_IN_DAYS
-    );
+    const snakeCased = unfilteredPosts.map((val) =>
+      objKeysCamelToSnake(val)
+    ) as unknown as Post[];
+
+    const cleanPosts = filterPosts(snakeCased, cleanBlackList, MAX_AGE_IN_DAYS);
 
     cleanPosts.forEach(async (post) => {
       const res = await sqlGetPostByLink(post.link);

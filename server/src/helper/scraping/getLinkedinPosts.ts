@@ -56,7 +56,7 @@ export async function getLinkedinPosts(
                 ?.textContent?.trim() ?? "",
             companyName:
               innerDiv?.querySelector("h4 a")?.textContent?.trim() ?? "",
-            websiteCreatedAtDateTime:
+            websiteCreatedAtDatetime:
               innerDiv
                 ?.querySelector("div.base-search-card__metadata time")
                 ?.getAttribute("datetime") ?? "",
@@ -81,7 +81,7 @@ export async function getLinkedinPosts(
     await browser.close();
 
     const jobPostsWithAge = jobPosts.map((post) => {
-      post.ageInDays = getAgeInDays(post.websiteCreatedAtDateTime ?? "");
+      post.ageInDays = getAgeInDays(post.websiteCreatedAtDatetime ?? "");
       return post;
     });
 

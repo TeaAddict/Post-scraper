@@ -12,8 +12,7 @@ export type Post = {
   keywords: string;
   applied: number;
   blacklisted: number;
-  // websiteCreatedAtDateTime: string;
-  websiteCreatedAtDateTime: Date;
+  websiteCreatedAtDatetime: Date;
   websiteCreatedAtString: string;
   id: number;
 };
@@ -23,3 +22,6 @@ export type FullPost = Post & {
   updatedAt: string;
   userId: number;
 };
+
+// websiteCreatedAtDatetime: Date;
+// ageInDays: number

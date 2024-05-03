@@ -22,3 +22,9 @@ export function snakeToCamel(value: string) {
       group.toUpperCase().replace("-", "").replace("_", "")
     );
 }
+
+export function objectSnakeToCamel(obj: { [keys: string]: any }) {
+  const camelObj: { [keys: string]: any } = {};
+  Object.keys(obj).forEach((val) => (camelObj[snakeToCamel(val)] = obj[val]));
+  return camelObj;
+}

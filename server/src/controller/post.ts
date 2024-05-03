@@ -20,7 +20,7 @@ export async function getPosts(req: express.Request, res: express.Response) {
       link: post.link,
       location: post.location,
       companyName: post.companyName,
-      websiteCreatedAtDateTime: post.websiteCreatedAtDateTime,
+      websiteCreatedAtDatetime: post.websiteCreatedAtDatetime,
       websiteCreatedAtString: post.websiteCreatedAtString,
       ageInDays: post.ageInDays,
       keywords: post.keywords,

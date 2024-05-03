@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Post } from "@/utils/types/postTypes";
+import { FullPost, Post } from "@/utils/types/postTypes";
 import PostTable from "./PostTable";
 import PostSearchBar from "./PostSearchBar";
 import FilterOptions from "@/components/FilterOptions";
@@ -8,20 +8,25 @@ import BlacklistedWordTable from "@/components/BlacklistedWordTable";
 import LogoutButton from "@/components/LogoutButton";
 import { usePosts } from "@/hooks/usePosts";
 import Settings from "../settings/Settings";
+import { objectSnakeToCamel } from "@/utils/helpers";
 
 const ClientPostsPage = () => {
   const [searchVal, setSearchVal] = useState("");
   const query = usePosts();
-  const data = (query.data as Post[]) ?? [];
+  const data = (query.data as FullPost[]) ?? [];
 
-  const filteredDataByKeyword = data.filter((post) => {
+  const camelCasedData = data.map(
+    (val: FullPost) => objectSnakeToCamel(val) as FullPost
+  );
+
+  const filteredDataByKeyword = camelCasedData.filter((post) => {
     if (!searchVal || post.keywords.includes(searchVal)) return post;
   });
 
   const cleanData = filteredDataByKeyword.map((val) => {
     return {
       ...val,
-      websiteCreatedAtDateTime: new Date(val.websiteCreatedAtDateTime),
+      websiteCreatedAtDatetime: new Date(val.websiteCreatedAtDatetime),
       ageInDays: Number(val.ageInDays),
     };
   });
