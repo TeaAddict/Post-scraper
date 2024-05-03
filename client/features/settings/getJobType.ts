@@ -1,3 +1,4 @@
+import { snakeToCamel } from "@/utils/helpers";
 import { JobType } from "@/utils/types/settingsTypes";
 
 export async function getJobType() {
@@ -12,7 +13,12 @@ export async function getJobType() {
     const body = await res.json();
     if (res.status >= 400) throw new Error(body.error);
 
-    return body as JobType;
+    const camelCased: any = {};
+    Object.keys(body).map(
+      (val) => (camelCased[snakeToCamel(val) as keyof JobType] = body[val])
+    );
+
+    return camelCased as JobType;
   } catch (error: any) {
     console.log(error.message);
     throw new Error("Problem with getting, jobType settings:", error);

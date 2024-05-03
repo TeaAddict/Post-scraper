@@ -14,3 +14,11 @@ export function deleteCookie(name: string, path: string, domain: string) {
       ";expires=Thu, 01 Jan 1970 00:00:01 GMT";
   }
 }
+
+export function snakeToCamel(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/([-_][a-z])/g, (group) =>
+      group.toUpperCase().replace("-", "").replace("_", "")
+    );
+}

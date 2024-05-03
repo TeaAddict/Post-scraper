@@ -1,3 +1,4 @@
+import { snakeToCamel } from "@/utils/helpers";
 import { Remote } from "@/utils/types/settingsTypes";
 
 export async function getRemote() {
@@ -9,7 +10,12 @@ export async function getRemote() {
     const body = await res.json();
     if (res.status >= 400) throw new Error(body.error);
 
-    return body as Remote;
+    const camelCased: any = {};
+    Object.keys(body).map(
+      (val) => (camelCased[snakeToCamel(val) as keyof Remote] = body[val])
+    );
+
+    return camelCased as Remote;
   } catch (error: any) {
     console.log(error.message);
     throw new Error("Problem with getting, remote settings:", error);

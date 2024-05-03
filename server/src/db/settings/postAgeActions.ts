@@ -51,3 +51,25 @@ export async function sqlGetPostAgeByUserId(userId: number) {
     console.log(error);
   }
 }
+
+export async function sqlUpdatePostAgeSettings(
+  userId: number,
+  data: { age: string }
+) {
+  try {
+    const postAgeSettings = await sqlGetPostAgeByUserId(userId);
+    if (!postAgeSettings) return;
+
+    const [result, meta] = await pool.query(
+      `UPDATE post_age SET age = ? WHERE id = ${postAgeSettings.id}`,
+      [data.age]
+    );
+
+    const postAgeSettingsResult = await sqlGetPostAgeByUserId(userId);
+    if (!postAgeSettingsResult) return;
+
+    return postAgeSettingsResult;
+  } catch (error) {
+    console.log(error);
+  }
+}

@@ -17,14 +17,31 @@ export type PostAge = {
   updated_at: Date;
   settings_id: number;
 };
-export type JobType = {
-  id: number;
+
+// export type FullPostAge = PostAge & {
+//   id: number;
+//   created_at: Date;
+//   updated_at: Date;
+//   settings_id: number;
+// };
+
+export type UpdateJobType = {
   full_time: boolean;
   part_time: boolean;
+};
+
+export type JobType = {
+  full_time: boolean;
+  part_time: boolean;
+};
+
+export type FullJobType = JobType & {
+  id: number;
   created_at: Date;
   updated_at: Date;
   settings_id: number;
 };
+
 export type ExperienceLevel = {
   id: number;
   internship: boolean;
@@ -36,6 +53,13 @@ export type ExperienceLevel = {
   updated_at: Date;
   settings_id: number;
 };
+export type UpdateExperienceLevel = {
+  internship: boolean;
+  entry_level: boolean;
+  mid_senior_level: boolean;
+  director: boolean;
+  executive: boolean;
+};
 export type Remote = {
   id: number;
   on_site: boolean;
@@ -44,4 +68,10 @@ export type Remote = {
   created_at: Date;
   updated_at: Date;
   settings_id: number;
+};
+
+export type UpdateRemote = {
+  on_site: boolean;
+  hybrid: boolean;
+  remote: boolean;
 };

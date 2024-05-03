@@ -3,11 +3,10 @@ import React, { useEffect, useRef, useState } from "react";
 
 type Props = {
   options: { value: string; label: string }[];
-  // active?: string;
-  // setActive?: React.Dispatch<React.SetStateAction<string>>;
   defaultActive?: { value: string; label: string }[];
   onSave?: Function;
-  name?: string;
+  label: string;
+  name: string;
   type: "radio" | "checkbox";
   width?: string;
 };
@@ -17,36 +16,53 @@ const Select = ({
   defaultActive,
   onSave,
   type,
+  label,
   name,
   width = "7rem",
 }: Props) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const currentState = options.map((val, index) => ({
+    ...val,
+    active:
+      defaultActive?.some((defVal) => defVal.value === val.value) ?? index === 0
+        ? true
+        : false,
+  }));
+
   const [isOpen, setIsOpen] = useState(false);
   const [active, setActive] = useState(
-    defaultActive ? defaultActive : type === "radio" ? [options[0]] : []
+    defaultActive
+      ? currentState
+      : type === "radio"
+      ? [{ ...options[0], active: true }]
+      : []
   );
-
-  const ref = useRef<HTMLDivElement>(null);
 
   function handleRadioChange(e: React.FormEvent<HTMLDivElement>) {
     const target = e.target as HTMLInputElement;
-    const selected = options.find((option) => option.value === target.value)!;
-    setActive([selected]);
+    const selected = options.map((val) => ({
+      ...val,
+      active: val.value === target.value,
+    }));
+    setActive(selected);
   }
   function handleCheckboxChange(e: React.FormEvent<HTMLDivElement>) {
     const target = e.target as HTMLInputElement;
-    const selected = options.find((option) => option.value === target.value)!;
-    const alreadyExists = active.some((val) => val.value === selected.value);
-    if (alreadyExists) {
-      const filteredList = active.filter((val) => val.value !== selected.value);
-      setActive(filteredList);
-    } else {
-      setActive([...active, selected]);
-    }
+
+    const isChecked = active.some(
+      (val) => val.value === target.value && val.active === true
+    );
+
+    const newActive = active.map((val) => ({
+      ...val,
+      active: val.value === target.value ? !isChecked : val.active,
+    }));
+    setActive(newActive);
   }
 
   function handleSave() {
     setIsOpen(!isOpen);
-    onSave?.(active);
+    onSave?.(name, active);
   }
 
   useEffect(() => {
@@ -76,13 +92,13 @@ const Select = ({
         className={`flex justify-center w-full h-full cursor-pointer`}
         onClick={() => isOpen && handleSave()}
       >
-        {isOpen ? "Save" : name}
+        {isOpen ? "Save" : label}
       </label>
       {isOpen && (
         <div className="absolute flex flex-col gap-1 z-10 top-full rounded-b-md bg-foreground border-x-2 border-b-2 w-[103%] text-black">
           {type === "radio" && (
             <div>
-              {options.map((val) => (
+              {active.map((val) => (
                 <label
                   key={val.value}
                   htmlFor={val.value}
@@ -93,7 +109,7 @@ const Select = ({
                     name={name}
                     value={val.value}
                     id={val.value}
-                    checked={active[0].value === val.value}
+                    checked={val.active}
                     onChange={(e) => {
                       handleRadioChange(e);
                     }}
@@ -105,7 +121,7 @@ const Select = ({
           )}
           {type === "checkbox" && (
             <div>
-              {options.map((val) => (
+              {active.map((val) => (
                 <label
                   key={val.value}
                   className="flex gap-1 hover:bg-primary p-1 last:rounded-b-sm cursor-pointer transition-all duration-300"
@@ -114,9 +130,7 @@ const Select = ({
                     type="checkbox"
                     name={name}
                     value={val.value}
-                    checked={active.some(
-                      (activeVal) => activeVal.value === val.value
-                    )}
+                    checked={val.active}
                     onChange={(e) => {
                       handleCheckboxChange(e);
                     }}

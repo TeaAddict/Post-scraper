@@ -3,10 +3,27 @@ import {
   sqlGetSettingsByUserId,
   sqlUpdateSettings,
 } from "../db/settings/settingsActions";
-import { sqlGetPostAgeByUserId } from "../db/settings/postAgeActions";
-import { sqlGetJobTypeByUserId } from "../db/settings/jobTypeActions";
-import { sqlGetExperienceLevelByUserId } from "../db/settings/experienceLevelActions";
-import { sqlGetRemoteByUserId } from "../db/settings/remoteActions";
+import {
+  sqlGetPostAgeByUserId,
+  sqlUpdatePostAgeSettings,
+} from "../db/settings/postAgeActions";
+import {
+  sqlGetJobTypeByUserId,
+  sqlUpdateJobTypeSettings,
+} from "../db/settings/jobTypeActions";
+import {
+  sqlGetExperienceLevelByUserId,
+  sqlUpdateExperienceLevelSettings,
+} from "../db/settings/experienceLevelActions";
+import {
+  sqlGetRemoteByUserId,
+  sqlUpdateRemoteSettings,
+} from "../db/settings/remoteActions";
+import {
+  UpdateExperienceLevel,
+  UpdateJobType,
+  UpdateRemote,
+} from "../Types/settingsTypes";
 
 export async function getSettings(req: express.Request, res: express.Response) {
   try {
@@ -62,6 +79,31 @@ export async function getPostAgeSettings(
   }
 }
 
+export async function updatePostAgeSettings(
+  req: express.Request,
+  res: express.Response
+) {
+  try {
+    const { userId } = res.locals;
+
+    if (!req.body)
+      return res.status(400).json({ error: "Missing request body" });
+
+    const settings = await sqlUpdatePostAgeSettings(userId, req.body);
+    if (!settings)
+      return res
+        .status(400)
+        .json({ error: "Problem updating post age settings" });
+
+    return res.status(201).json(settings);
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(400)
+      .json({ error: "Problem updating post age settings" });
+  }
+}
+
 export async function getJobTypeSettings(
   req: express.Request,
   res: express.Response
@@ -75,6 +117,33 @@ export async function getJobTypeSettings(
       return res
         .status(400)
         .json({ error: "Problem with getting job type settings" });
+    return res.status(200).json(settings);
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(400)
+      .json({ error: "Problem with getting job type settings" });
+  }
+}
+
+export async function updateJobTypeSettings(
+  req: express.Request,
+  res: express.Response
+) {
+  try {
+    const { userId } = res.locals;
+    const body = req.body as UpdateJobType;
+    if (!body)
+      return res.status(400).json({ error: "Request body is missing" });
+
+    if (!userId) return res.status(400).json({ error: "User id is missing" });
+
+    const settings = await sqlUpdateJobTypeSettings(userId, body);
+    if (!settings)
+      return res
+        .status(400)
+        .json({ error: "Problem with getting job type settings" });
+
     return res.status(200).json(settings);
   } catch (error) {
     console.log(error);
@@ -106,6 +175,34 @@ export async function getExperienceLevelSettings(
   }
 }
 
+export async function updateExperienceLevelSettings(
+  req: express.Request,
+  res: express.Response
+) {
+  try {
+    const { userId } = res.locals;
+    const body = req.body as UpdateExperienceLevel;
+
+    if (!body)
+      return res.status(400).json({ error: "Request body is missing" });
+
+    if (!userId) return res.status(400).json({ error: "User id is missing" });
+
+    const settings = await sqlUpdateExperienceLevelSettings(userId, body);
+    if (!settings)
+      return res
+        .status(400)
+        .json({ error: "Problem with getting experience level settings" });
+
+    return res.status(200).json(settings);
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(400)
+      .json({ error: "Problem with getting experience level settings" });
+  }
+}
+
 export async function getRemoteSettings(
   req: express.Request,
   res: express.Response
@@ -119,6 +216,33 @@ export async function getRemoteSettings(
       return res
         .status(400)
         .json({ error: "Problem with getting remote settings" });
+    return res.status(200).json(settings);
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(400)
+      .json({ error: "Problem with getting remote settings" });
+  }
+}
+
+export async function updateRemoteSettings(
+  req: express.Request,
+  res: express.Response
+) {
+  try {
+    const { userId } = res.locals;
+    const body = req.body as UpdateRemote;
+    if (!body)
+      return res.status(400).json({ error: "Request body is missing" });
+
+    if (!userId) return res.status(400).json({ error: "User id is missing" });
+
+    const settings = await sqlUpdateRemoteSettings(userId, body);
+    if (!settings)
+      return res
+        .status(400)
+        .json({ error: "Problem with getting remote settings" });
+
     return res.status(200).json(settings);
   } catch (error) {
     console.log(error);

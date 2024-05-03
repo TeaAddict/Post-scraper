@@ -4,14 +4,18 @@ import {
   useExperienceLevel,
   useJobType,
   usePostAge,
+  useRadioMutation,
   useRemote,
 } from "@/hooks/useSettings";
 import { ExperienceLevel, JobType, Remote } from "@/utils/types/settingsTypes";
 import React from "react";
+import { useCheckboxMutation } from "../../hooks/useSettings";
 
 const Settings = () => {
   const postAgeSettings = usePostAge();
+  const radioMutation = useRadioMutation();
   const jobTypeSettings = useJobType();
+  const checkboxMutation = useCheckboxMutation();
   const experienceLevelSettings = useExperienceLevel();
   const remoteSettings = useRemote();
   const isLoading =
@@ -35,8 +39,25 @@ const Settings = () => {
     (val) => remoteSettings.data?.[val.value as keyof Remote] === 1
   );
 
-  function handleSave(data: { value: string; label: string }[]) {
-    console.log("Result:", data);
+  function handleRadioSave(
+    name: string,
+    data: {
+      value: "any" | "pastMonth" | "pastWeek" | "past24Hours";
+      label: string;
+      active: boolean;
+    }[]
+  ) {
+    const ageVal = data.find((val) => val.active === true)!.value;
+    radioMutation.mutate({ name, age: ageVal });
+  }
+
+  function handleCheckboxSave(
+    name: string,
+    data: { value: string; label: string; active: boolean }[]
+  ) {
+    const updateData: { [key: string]: boolean } = {};
+    data.forEach((val) => (updateData[val.value] = val.active));
+    checkboxMutation.mutate({ name, updateData });
   }
 
   if (isLoading) return <p>Loading...</p>;
@@ -45,34 +66,38 @@ const Settings = () => {
     <div className="flex gap-5">
       <Select
         options={age}
-        name="Age"
+        label="Age"
+        name="postAge"
         type="radio"
-        onSave={handleSave}
+        onSave={handleRadioSave}
         defaultActive={postAgeActive}
       />
 
       <Select
         options={jobType}
-        name="Job type"
+        label="Job type"
+        name="jobType"
         type="checkbox"
-        onSave={handleSave}
+        onSave={handleCheckboxSave}
         defaultActive={jobTypeActive}
       />
 
       <Select
         options={experienceLevel}
-        name="Experience level"
+        label="Experience level"
+        name="experienceLevel"
         type="checkbox"
         width={"10rem"}
-        onSave={handleSave}
+        onSave={handleCheckboxSave}
         defaultActive={experienceLevelActive}
       />
 
       <Select
         options={remote}
-        name="Remote"
+        label="Remote"
+        name="remote"
         type="checkbox"
-        onSave={handleSave}
+        onSave={handleCheckboxSave}
         defaultActive={remoteActive}
       />
     </div>

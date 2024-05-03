@@ -1,4 +1,5 @@
-import { JobType } from "../../Types/settingsTypes";
+import { formatInputForUpdate } from "../../helper/updateHelper";
+import { FullJobType, UpdateJobType } from "../../Types/settingsTypes";
 import pool from "../index";
 import {
   sqlGetSettingsBySettingsId,
@@ -31,7 +32,7 @@ export async function sqlGetJobTypeBySettingsId(settingsId: number) {
       "SELECT * FROM job_type WHERE settings_id = ?",
       settingsId
     );
-    const jobTypeSettings = (result as {}[])[0] as JobType;
+    const jobTypeSettings = (result as {}[])[0] as FullJobType;
     return jobTypeSettings;
   } catch (error) {
     console.log(error);
@@ -47,6 +48,30 @@ export async function sqlGetJobTypeByUserId(userId: number) {
     if (!jobType) return;
 
     return jobType;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function sqlUpdateJobTypeSettings(
+  userId: number,
+  data: UpdateJobType
+) {
+  try {
+    const { keyValue, preparedArr } = formatInputForUpdate(data);
+
+    const jobTypeSettings = await sqlGetJobTypeByUserId(userId);
+    if (!jobTypeSettings) return;
+
+    const [result, meta] = await pool.query(
+      `UPDATE job_type SET ${keyValue} WHERE id = ${jobTypeSettings.id}`,
+      preparedArr
+    );
+
+    const jobTypeSettingsResult = await sqlGetJobTypeByUserId(userId);
+    if (!jobTypeSettingsResult) return;
+
+    return jobTypeSettingsResult;
   } catch (error) {
     console.log(error);
   }

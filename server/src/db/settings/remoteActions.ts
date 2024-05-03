@@ -1,4 +1,5 @@
-import { Remote } from "../../Types/settingsTypes";
+import { formatInputForUpdate } from "../../helper/updateHelper";
+import { Remote, UpdateRemote } from "../../Types/settingsTypes";
 import pool from "../index";
 import {
   sqlGetSettingsBySettingsId,
@@ -48,6 +49,30 @@ export async function sqlGetRemoteByUserId(userId: number) {
     if (!remote) return;
 
     return remote;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function sqlUpdateRemoteSettings(
+  userId: number,
+  data: UpdateRemote
+) {
+  try {
+    const { keyValue, preparedArr } = formatInputForUpdate(data);
+
+    const remoteSettings = await sqlGetRemoteByUserId(userId);
+    if (!remoteSettings) return;
+
+    const [result, meta] = await pool.query(
+      `UPDATE remote SET ${keyValue} WHERE id = ${remoteSettings.id}`,
+      preparedArr
+    );
+
+    const remoteSettingsResult = await sqlGetRemoteByUserId(userId);
+    if (!remoteSettingsResult) return;
+
+    return remoteSettingsResult;
   } catch (error) {
     console.log(error);
   }

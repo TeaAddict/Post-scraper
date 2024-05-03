@@ -1,4 +1,8 @@
-import { ExperienceLevel } from "../../Types/settingsTypes";
+import { formatInputForUpdate } from "../../helper/updateHelper";
+import {
+  ExperienceLevel,
+  UpdateExperienceLevel,
+} from "../../Types/settingsTypes";
 import pool from "../index";
 import {
   sqlGetSettingsBySettingsId,
@@ -49,6 +53,30 @@ export async function sqlGetExperienceLevelByUserId(userId: number) {
     if (!experienceLevel) return;
 
     return experienceLevel;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function sqlUpdateExperienceLevelSettings(
+  userId: number,
+  data: UpdateExperienceLevel
+) {
+  try {
+    const { keyValue, preparedArr } = formatInputForUpdate(data);
+
+    const experienceLevel = await sqlGetExperienceLevelByUserId(userId);
+    if (!experienceLevel) return;
+
+    const [result, meta] = await pool.query(
+      `UPDATE experience_level SET ${keyValue} WHERE id = ${experienceLevel.id}`,
+      preparedArr
+    );
+
+    const remoteSettingsResult = await sqlGetExperienceLevelByUserId(userId);
+    if (!remoteSettingsResult) return;
+
+    return remoteSettingsResult;
   } catch (error) {
     console.log(error);
   }
