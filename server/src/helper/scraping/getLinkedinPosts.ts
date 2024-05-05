@@ -1,6 +1,12 @@
 import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import { getAgeInDays, getIp, sleep } from "../helpers";
+import {
+  ExperienceLevel,
+  JobType,
+  PostAge,
+  Remote,
+} from "../../Types/settingsTypes";
 
 function addUrlParams(webUrl: string, keywords: string, location: string) {
   const url = new URL(webUrl);
@@ -94,6 +100,10 @@ export async function getLinkedinPosts(
 export async function getWebsitePosts(
   keywords: string,
   location: string,
+  age: PostAge,
+  jobType: JobType,
+  experienceLevel: ExperienceLevel,
+  remote: Remote,
   pages: number = 1,
   retries: number = 5,
   sleepDuration: number = 10

@@ -1,12 +1,6 @@
 "use client";
 
 import {
-  ScrollArea,
-  ScrollAreaScrollbar,
-  ScrollAreaThumb,
-  ScrollAreaViewport,
-} from "@radix-ui/react-scroll-area";
-import {
   Dispatch,
   FC,
   MouseEventHandler,
@@ -29,7 +23,6 @@ type Body = { [key: string]: any }[];
 type Props = {
   head: { label: string; value: string; bodyFunc?: FC<any> }[];
   body: { [key: string]: any }[];
-
   onClickBody?: MouseEventHandler<HTMLTableRowElement>;
   initSort?: string;
 };
@@ -74,6 +67,7 @@ function sort(data: Body, columnName: string, direction: string) {
 }
 
 const Table = ({ head, body, onClickBody, initSort }: Props) => {
+  const [activeRow, setActiveRow] = useState<Number>();
   const [sortVal, setSortVal] = useState(
     `${initSort}-desc` ?? `${head[0].value}-desc`
   );
@@ -85,9 +79,15 @@ const Table = ({ head, body, onClickBody, initSort }: Props) => {
     ascDesc(head, sortVal, setSortVal);
   }
 
+  function handleBody(
+    e: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
+    index: number
+  ) {
+    onClickBody?.(e);
+    setActiveRow(index);
+  }
+
   // Needs w-full h-full on parent containers + overflow-auto,
-  // idk why it cant just inherit parent size and overflow...
-  // I pray for any soul that has to deal with tables
   return (
     <table className="text-left text-base">
       <thead className="sticky top-0 uppercase">
@@ -108,8 +108,10 @@ const Table = ({ head, body, onClickBody, initSort }: Props) => {
         {sortedData.map((row, index) => (
           <tr
             key={index}
-            className=" border-t border-current"
-            onClick={onClickBody}
+            className={`border-t border-current ${
+              activeRow === index && "bg-card-lighter2"
+            }`}
+            onClick={(e) => handleBody(e, index)}
           >
             {head.map((el) => (
               <td key={el.label} className=" px-6 py-4">

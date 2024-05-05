@@ -15,7 +15,8 @@ h3 {
     --card: 247, 19%, 18%;
     --card-foreground: 222.2 84% 4.9%;
 
-    --lighter-card: 247, 19%, 25%;
+    --lighter-card: 247, 23%, 25%;
+    --lighter-card2: 247, 19%, 23%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;

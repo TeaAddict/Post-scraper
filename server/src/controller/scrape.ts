@@ -2,11 +2,12 @@ import express from "express";
 import { sqlCreatePost, sqlGetPostByLink } from "../db/post/actions";
 import { sqlGetUserById } from "../db/user/actions";
 import { sqlGetKeywords } from "../db/blacklist/actions";
-import { getWebsitePosts } from "../helper/scraping/getLinkedinPosts";
 import { filterPosts } from "../utils/filterByTitle";
 import { TEST_DATA1 } from "../contants";
 import { objKeysCamelToSnake } from "../helper/helpers";
 import { Post } from "../Types/postTypes";
+import { sqlGetAllLinkedinSettings } from "../db/settings/settingsActions";
+import { getWebsitePosts } from "../helper/scraping/getLinkedinPosts";
 
 export async function getPosts(req: express.Request, res: express.Response) {
   try {
@@ -26,7 +27,15 @@ export async function getPosts(req: express.Request, res: express.Response) {
         .json({ error: "Problem with getting blacklisted keywords" });
     const cleanBlackList = blacklistedKeywords.map((val) => val.keyword);
 
-    // const unfilteredPosts = await getWebsitePosts(keyword, location);
+    const { age, jobType, experienceLevel, remote } =
+      await sqlGetAllLinkedinSettings(userId);
+
+    console.log(age);
+    console.log(jobType);
+    console.log(experienceLevel);
+    console.log(remote);
+
+    // const unfilteredPosts = await getWebsitePosts(keyword, location, age, jobType, experienceLevel, remote);
     const unfilteredPosts = TEST_DATA1;
     if (!unfilteredPosts)
       return res.status(400).json({ error: "Problem with scraper" });

@@ -1,10 +1,20 @@
 import { formatInputForUpdate } from "../../helper/updateHelper";
 import { FullSettings, Settings } from "../../Types/settingsTypes";
 import pool from "../index";
-import { sqlCreateExperienceLevelSettings } from "./experienceLevelActions";
-import { sqlCreateJobTypeSettings } from "./jobTypeActions";
-import { sqlCreatePostAgeSettings } from "./postAgeActions";
-import { sqlCreateRemoteSettings } from "./remoteActions";
+import {
+  sqlCreateExperienceLevelSettings,
+  sqlGetExperienceLevelByUserId,
+} from "./experienceLevelActions";
+import {
+  sqlCreateJobTypeSettings,
+  sqlGetJobTypeByUserId,
+} from "./jobTypeActions";
+import {
+  sqlCreatePostAgeSettings,
+  sqlGetPostAgeByUserId,
+} from "./postAgeActions";
+import { sqlCreateRemoteSettings, sqlGetRemoteByUserId } from "./remoteActions";
+import { experienceLevel } from "../../../../client/constants";
 
 export async function sqlGetSettingsByUserId(userId: number) {
   try {
@@ -59,6 +69,26 @@ export async function sqlUpdateSettings(userId: number, data: Settings) {
     const [result, meta] = await pool.query(query, values);
     const settings = await sqlGetSettingsByUserId(userId);
     return settings;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function sqlGetAllLinkedinSettings(userId: number) {
+  try {
+    const age = await sqlGetPostAgeByUserId(userId);
+    if (!age) throw new Error("Age settings missing");
+
+    const jobType = await sqlGetJobTypeByUserId(userId);
+    if (!jobType) throw new Error("Job type settings missing");
+
+    const experienceLevel = await sqlGetExperienceLevelByUserId(userId);
+    if (!experienceLevel) throw new Error("Experience level settings missing");
+
+    const remote = await sqlGetRemoteByUserId(userId);
+    if (!remote) throw new Error("Remote settings missing");
+
+    return { age, jobType, experienceLevel, remote };
   } catch (error) {
     console.log(error);
   }

@@ -1,20 +1,11 @@
 import React from "react";
 import Table from "@/components/shared/Table";
-import Link from "next/link";
-
 import Button from "../../components/shared/Button";
 import TableCheckBox from "./TableCheckbox";
 import { Post } from "@/utils/types/postTypes";
 import { IoMdClose } from "react-icons/io";
 import { useDeletePost } from "@/hooks/usePosts";
-
-function button(value: string) {
-  return (
-    <Button>
-      <Link href={value}>Start applying</Link>
-    </Button>
-  );
-}
+import LinkButton from "./linkButton";
 
 const PostTable = ({ data }: { data: Post[] }) => {
   const deleteMutation = useDeletePost();
@@ -26,7 +17,7 @@ const PostTable = ({ data }: { data: Post[] }) => {
   const header = [
     { label: "applied", value: "applied", bodyFunc: TableCheckBox },
     { label: "blacklisted", value: "blacklisted", bodyFunc: TableCheckBox },
-    { label: "link", value: "link", bodyFunc: button },
+    { label: "link", value: "link", bodyFunc: LinkButton },
     { label: "title", value: "title" },
     { label: "location", value: "location" },
     { label: "company Name", value: "companyName" },

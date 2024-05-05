@@ -53,6 +53,7 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
           lighter: "hsl(var(--lighter-card))",
+          lighter2: "hsl(var(--lighter-card2))",
         },
       },
       borderRadius: {
