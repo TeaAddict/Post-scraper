@@ -100,10 +100,12 @@ export async function getLinkedinPosts(
 export async function getWebsitePosts(
   keywords: string,
   location: string,
-  age: PostAge,
-  jobType: JobType,
-  experienceLevel: ExperienceLevel,
-  remote: Remote,
+  linkedinSettings: {
+    age: PostAge;
+    jobType: JobType;
+    experienceLevel: ExperienceLevel;
+    remote: Remote;
+  },
   pages: number = 1,
   retries: number = 5,
   sleepDuration: number = 10

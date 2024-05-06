@@ -27,13 +27,14 @@ export async function getPosts(req: express.Request, res: express.Response) {
         .json({ error: "Problem with getting blacklisted keywords" });
     const cleanBlackList = blacklistedKeywords.map((val) => val.keyword);
 
-    const { age, jobType, experienceLevel, remote } =
-      await sqlGetAllLinkedinSettings(userId);
+    const linkedinSettings = await sqlGetAllLinkedinSettings(userId);
+    if (!linkedinSettings)
+      throw new Error("Problem with getting linkedin settings");
 
-    console.log(age);
-    console.log(jobType);
-    console.log(experienceLevel);
-    console.log(remote);
+    console.log(linkedinSettings.age);
+    console.log(linkedinSettings.jobType);
+    console.log(linkedinSettings.experienceLevel);
+    console.log(linkedinSettings.remote);
 
     // const unfilteredPosts = await getWebsitePosts(keyword, location, age, jobType, experienceLevel, remote);
     const unfilteredPosts = TEST_DATA1;
