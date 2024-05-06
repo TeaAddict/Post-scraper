@@ -10,68 +10,36 @@ export type FullSettings = Settings & {
   user_id: number;
 };
 
-export type PostAge = {
+export type SettingsChildDbInfo = {
   id: number;
-  age: string;
   created_at: Date;
   updated_at: Date;
   settings_id: number;
 };
 
-// export type FullPostAge = PostAge & {
-//   id: number;
-//   created_at: Date;
-//   updated_at: Date;
-//   settings_id: number;
-// };
-
-export type UpdateJobType = {
-  full_time: boolean;
-  part_time: boolean;
+export type PostAge = {
+  age: string;
 };
+export type FullPostAge = PostAge & SettingsChildDbInfo;
 
 export type JobType = {
   full_time: boolean;
   part_time: boolean;
 };
-
-export type FullJobType = JobType & {
-  id: number;
-  created_at: Date;
-  updated_at: Date;
-  settings_id: number;
-};
+export type FullJobType = JobType & SettingsChildDbInfo;
 
 export type ExperienceLevel = {
-  id: number;
-  internship: boolean;
-  entry_level: boolean;
-  mid_senior_level: boolean;
-  director: boolean;
-  executive: boolean;
-  created_at: Date;
-  updated_at: Date;
-  settings_id: number;
-};
-export type UpdateExperienceLevel = {
   internship: boolean;
   entry_level: boolean;
   mid_senior_level: boolean;
   director: boolean;
   executive: boolean;
 };
-export type Remote = {
-  id: number;
-  on_site: boolean;
-  hybrid: boolean;
-  remote: boolean;
-  created_at: Date;
-  updated_at: Date;
-  settings_id: number;
-};
+export type FullExperienceLevel = ExperienceLevel & SettingsChildDbInfo;
 
-export type UpdateRemote = {
+export type Remote = {
   on_site: boolean;
   hybrid: boolean;
   remote: boolean;
 };
+export type FullRemote = Remote & SettingsChildDbInfo;

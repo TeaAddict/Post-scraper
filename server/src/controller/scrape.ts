@@ -8,6 +8,7 @@ import { objKeysCamelToSnake } from "../helper/helpers";
 import { Post } from "../Types/postTypes";
 import { sqlGetAllLinkedinSettings } from "../db/settings/settingsActions";
 import { getWebsitePosts } from "../helper/scraping/getLinkedinPosts";
+import { jobType, experienceLevel } from "../../../client/constants";
 
 export async function getPosts(req: express.Request, res: express.Response) {
   try {
@@ -30,12 +31,31 @@ export async function getPosts(req: express.Request, res: express.Response) {
     const linkedinSettings = await sqlGetAllLinkedinSettings(userId);
     if (!linkedinSettings)
       throw new Error("Problem with getting linkedin settings");
+    const { postAge, jobType, experienceLevel, remote } = linkedinSettings;
 
-    console.log(linkedinSettings.age);
-    console.log(linkedinSettings.jobType);
-    console.log(linkedinSettings.experienceLevel);
-    console.log(linkedinSettings.remote);
+    console.log(postAge);
+    console.log(jobType);
+    console.log(experienceLevel);
+    console.log(remote);
+    const postAgeClean = { age: postAge.age };
+    const jobTypeClean = {
+      full_time: jobType.full_time,
+      part_time: jobType.part_time,
+    };
+    const experienceLevelClean = {
+      internship: experienceLevel.internship,
+      entry_level: experienceLevel.entry_level,
+      mid_senior_level: experienceLevel.mid_senior_level,
+      director: experienceLevel.director,
+      executive: experienceLevel.executive,
+    };
+    const remoteClean = {
+      on_site: remote.on_site,
+      hybrid: remote.hybrid,
+      remote: remote.remote,
+    };
 
+    return res.sendStatus(200);
     // const unfilteredPosts = await getWebsitePosts(keyword, location, age, jobType, experienceLevel, remote);
     const unfilteredPosts = TEST_DATA1;
     if (!unfilteredPosts)

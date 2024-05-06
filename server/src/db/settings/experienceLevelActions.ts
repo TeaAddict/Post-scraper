@@ -1,7 +1,7 @@
 import { formatInputForUpdate } from "../../helper/updateHelper";
 import {
   ExperienceLevel,
-  UpdateExperienceLevel,
+  FullExperienceLevel,
 } from "../../Types/settingsTypes";
 import pool from "../index";
 import {
@@ -35,7 +35,7 @@ export async function sqlGetExperienceLevelBySettingsId(settingsId: number) {
       "SELECT * FROM experience_level WHERE settings_id = ?",
       settingsId
     );
-    const experienceLevelSettings = (result as {}[])[0] as ExperienceLevel;
+    const experienceLevelSettings = (result as {}[])[0] as FullExperienceLevel;
     return experienceLevelSettings;
   } catch (error) {
     console.log(error);
@@ -60,7 +60,7 @@ export async function sqlGetExperienceLevelByUserId(userId: number) {
 
 export async function sqlUpdateExperienceLevelSettings(
   userId: number,
-  data: UpdateExperienceLevel
+  data: ExperienceLevel
 ) {
   try {
     const { keyValue, preparedArr } = formatInputForUpdate(data);

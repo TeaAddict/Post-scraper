@@ -1,4 +1,4 @@
-import { PostAge } from "../../Types/settingsTypes";
+import { FullPostAge, PostAge } from "../../Types/settingsTypes";
 import pool from "../index";
 import {
   sqlGetSettingsBySettingsId,
@@ -31,7 +31,7 @@ export async function sqlGetPostAgeBySettingsId(settingsId: number) {
       "SELECT * FROM post_age WHERE settings_id = ?",
       settingsId
     );
-    const ageSettings = (result as {}[])[0] as PostAge;
+    const ageSettings = (result as {}[])[0] as FullPostAge;
     return ageSettings;
   } catch (error) {
     console.log(error);

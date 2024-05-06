@@ -19,11 +19,7 @@ import {
   sqlGetRemoteByUserId,
   sqlUpdateRemoteSettings,
 } from "../db/settings/remoteActions";
-import {
-  UpdateExperienceLevel,
-  UpdateJobType,
-  UpdateRemote,
-} from "../Types/settingsTypes";
+import { ExperienceLevel, JobType, Remote } from "../Types/settingsTypes";
 
 export async function getSettings(req: express.Request, res: express.Response) {
   try {
@@ -132,7 +128,7 @@ export async function updateJobTypeSettings(
 ) {
   try {
     const { userId } = res.locals;
-    const body = req.body as UpdateJobType;
+    const body = req.body as JobType;
     if (!body)
       return res.status(400).json({ error: "Request body is missing" });
 
@@ -181,7 +177,7 @@ export async function updateExperienceLevelSettings(
 ) {
   try {
     const { userId } = res.locals;
-    const body = req.body as UpdateExperienceLevel;
+    const body = req.body as ExperienceLevel;
 
     if (!body)
       return res.status(400).json({ error: "Request body is missing" });
@@ -231,7 +227,7 @@ export async function updateRemoteSettings(
 ) {
   try {
     const { userId } = res.locals;
-    const body = req.body as UpdateRemote;
+    const body = req.body as Remote;
     if (!body)
       return res.status(400).json({ error: "Request body is missing" });
 
