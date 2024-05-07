@@ -76,8 +76,8 @@ export async function sqlUpdateSettings(userId: number, data: Settings) {
 
 export async function sqlGetAllLinkedinSettings(userId: number) {
   try {
-    const postAge = await sqlGetPostAgeByUserId(userId);
-    if (!postAge) throw new Error("Age settings missing");
+    const age = await sqlGetPostAgeByUserId(userId);
+    if (!age) throw new Error("Age settings missing");
 
     const jobType = await sqlGetJobTypeByUserId(userId);
     if (!jobType) throw new Error("Job type settings missing");
@@ -88,7 +88,7 @@ export async function sqlGetAllLinkedinSettings(userId: number) {
     const remote = await sqlGetRemoteByUserId(userId);
     if (!remote) throw new Error("Remote settings missing");
 
-    return { postAge, jobType, experienceLevel, remote };
+    return { age, jobType, experienceLevel, remote };
   } catch (error) {
     console.log(error);
   }

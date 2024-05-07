@@ -1,5 +1,5 @@
 import { formatInputForUpdate } from "../../helper/updateHelper";
-import { FullJobType, UpdateJobType } from "../../Types/settingsTypes";
+import { FullJobType, JobType } from "../../Types/settingsTypes";
 import pool from "../index";
 import {
   sqlGetSettingsBySettingsId,
@@ -53,10 +53,7 @@ export async function sqlGetJobTypeByUserId(userId: number) {
   }
 }
 
-export async function sqlUpdateJobTypeSettings(
-  userId: number,
-  data: UpdateJobType
-) {
+export async function sqlUpdateJobTypeSettings(userId: number, data: JobType) {
   try {
     const { keyValue, preparedArr } = formatInputForUpdate(data);
 

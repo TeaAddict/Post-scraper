@@ -1,5 +1,5 @@
 import { formatInputForUpdate } from "../../helper/updateHelper";
-import { Remote, UpdateRemote } from "../../Types/settingsTypes";
+import { FullRemote, Remote } from "../../Types/settingsTypes";
 import pool from "../index";
 import {
   sqlGetSettingsBySettingsId,
@@ -33,7 +33,7 @@ export async function sqlGetRemoteBySettingsId(settingsId: number) {
       "SELECT * FROM remote WHERE settings_id = ?",
       settingsId
     );
-    const remoteSettings = (result as {}[])[0] as Remote;
+    const remoteSettings = (result as {}[])[0] as FullRemote;
     return remoteSettings;
   } catch (error) {
     console.log(error);
@@ -54,10 +54,7 @@ export async function sqlGetRemoteByUserId(userId: number) {
   }
 }
 
-export async function sqlUpdateRemoteSettings(
-  userId: number,
-  data: UpdateRemote
-) {
+export async function sqlUpdateRemoteSettings(userId: number, data: Remote) {
   try {
     const { keyValue, preparedArr } = formatInputForUpdate(data);
 

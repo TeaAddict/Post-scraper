@@ -32,3 +32,12 @@ export function objKeysCamelToSnake(obj: {
   );
   return snakeCased;
 }
+
+export function addUrlParams(
+  webUrl: string,
+  param: { key: string; value: string }
+) {
+  const url = new URL(webUrl);
+  url.searchParams.set(param.key, param.value);
+  return url.toString();
+}

@@ -1,31 +1,40 @@
 import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
-import { getAgeInDays, getIp, sleep } from "../helpers";
+import { addUrlParams, getAgeInDays, getIp, sleep } from "../helpers";
 import {
   ExperienceLevel,
   JobType,
   PostAge,
   Remote,
 } from "../../Types/settingsTypes";
-
-function addUrlParams(webUrl: string, keywords: string, location: string) {
-  const url = new URL(webUrl);
-  url.searchParams.set("keywords", keywords);
-  url.searchParams.set("location", location);
-  return url.toString();
-}
+import { formatLinkedinUrlSettings } from "./formatLinkedinUrlSettings";
 
 // If returns: error or []   it probably means that linkedin is BLOCKING, code is fine. Just send request again.
 export async function getLinkedinPosts(
   keywords: string,
   location: string,
-  pages: number = 1
+  pages: number = 1,
+  settings: {
+    age: PostAge;
+    jobType: JobType;
+    experienceLevel: ExperienceLevel;
+    remote: Remote;
+  }
 ) {
   try {
     const websiteUrl =
       "https://www.linkedin.com/jobs/search?keywords=javascript&location=Lithuania&geoId=&trk=public_jobs_jobs-search-bar_search-submit&position=1&pageNum=0";
 
-    const cleanUrl = addUrlParams(websiteUrl, keywords, location);
+    const updatedUrl = formatLinkedinUrlSettings(websiteUrl, settings);
+
+    const urlWKeywords = addUrlParams(updatedUrl, {
+      key: "keywords",
+      value: keywords,
+    });
+    const cleanUrl = addUrlParams(urlWKeywords, {
+      key: "location",
+      value: location,
+    });
 
     const currentIp = await getIp();
     if (currentIp === process.env.MY_IP) {
@@ -113,7 +122,12 @@ export async function getWebsitePosts(
   try {
     for (let i = 1; i !== retries + 1; i++) {
       console.log("Loop num:", i);
-      const posts = await getLinkedinPosts(keywords, location, pages);
+      const posts = await getLinkedinPosts(
+        keywords,
+        location,
+        pages,
+        linkedinSettings
+      );
 
       if (posts === "hide ip") {
         return;
