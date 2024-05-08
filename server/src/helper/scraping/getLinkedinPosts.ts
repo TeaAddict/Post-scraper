@@ -51,6 +51,15 @@ export async function getLinkedinPosts(
 
     const jobPosts = await page.evaluate(
       (cleanUrl, keywords) => {
+        const couldNotFind = document
+          .querySelector("h1.core-section-container__main-title.main-title")
+          ?.textContent?.trim();
+        const spelledIncorrectly = document
+          .querySelector("p.no-results__subheading")
+          ?.textContent?.trim();
+
+        if (couldNotFind || spelledIncorrectly) return "no results";
+
         const posts = Array.from(
           document.querySelectorAll("div.job-search-card")
         );
@@ -91,6 +100,9 @@ export async function getLinkedinPosts(
       cleanUrl,
       keywords
     );
+
+    if (jobPosts === "no results") return "no results";
+
     if (!jobPosts.length) return;
 
     await browser.close();
@@ -130,6 +142,9 @@ export async function getWebsitePosts(
       );
 
       if (posts === "hide ip") {
+        return;
+      } else if (posts === "no results") {
+        console.log("Could not find posts");
         return;
       } else if (posts === undefined || !posts.length) {
         console.log("Empty arr, send request again in 5 seconds");

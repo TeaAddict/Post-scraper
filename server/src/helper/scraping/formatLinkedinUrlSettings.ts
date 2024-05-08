@@ -92,7 +92,6 @@ export function formatLinkedinUrlSettings(
       key: param.key,
       value: param.value,
     });
-    console.log(websiteUrl);
   });
 
   return websiteUrl;
