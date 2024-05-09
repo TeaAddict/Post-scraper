@@ -6,10 +6,15 @@ import {
   usePostAge,
   useRadioMutation,
   useRemote,
+  useSettings,
 } from "@/hooks/useSettings";
 import { ExperienceLevel, JobType, Remote } from "@/utils/types/settingsTypes";
 import React from "react";
-import { useCheckboxMutation } from "../../hooks/useSettings";
+import {
+  useCheckboxMutation,
+  useSettingsMutation,
+} from "../../hooks/useSettings";
+import InputBox from "@/components/shared/InputBox";
 
 const Settings = () => {
   const postAgeSettings = usePostAge();
@@ -18,6 +23,8 @@ const Settings = () => {
   const checkboxMutation = useCheckboxMutation();
   const experienceLevelSettings = useExperienceLevel();
   const remoteSettings = useRemote();
+  const { data: settingsData } = useSettings();
+  const settingsMutation = useSettingsMutation();
   const isLoading =
     postAgeSettings.isLoading ||
     jobTypeSettings.isLoading ||
@@ -60,6 +67,15 @@ const Settings = () => {
     checkboxMutation.mutate({ name, updateData });
   }
 
+  function handlePostCountChange(e: React.FormEvent<HTMLInputElement>) {
+    if (settingsData)
+      settingsMutation.mutate({
+        appliedFilter: settingsData.appliedFilter,
+        blacklistedFilter: settingsData.blacklistedFilter,
+        getPostCount: Number(e.currentTarget.value),
+      });
+  }
+
   if (isLoading) return <p>Loading...</p>;
 
   return (
@@ -100,6 +116,15 @@ const Settings = () => {
         onSave={handleCheckboxSave}
         defaultActive={remoteActive}
       />
+
+      <div className="flex items-center w-32 gap-2">
+        <p>get posts:</p>
+        <InputBox
+          type="number"
+          defaultValue={settingsData?.getPostCount}
+          onChange={handlePostCountChange}
+        />
+      </div>
     </div>
   );
 };

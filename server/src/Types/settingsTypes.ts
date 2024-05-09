@@ -1,6 +1,7 @@
 export type Settings = {
-  appliedFilter: boolean;
-  blacklistedFilter: boolean;
+  applied_filter: boolean;
+  blacklisted_filter: boolean;
+  get_post_count: number;
 };
 
 export type FullSettings = Settings & {

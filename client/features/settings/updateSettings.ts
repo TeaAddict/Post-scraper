@@ -1,7 +1,4 @@
-export type Settings = {
-  appliedFilter?: boolean;
-  blacklistedFilter?: boolean;
-};
+import { Settings } from "@/utils/types/settingsTypes";
 
 export async function updateSettings(settings: Settings) {
   try {
@@ -13,7 +10,7 @@ export async function updateSettings(settings: Settings) {
       body: JSON.stringify(settings),
     });
     const body = await res.json();
-    if (res.status >= 400) throw new Error(body);
+    if (res.status >= 400) throw new Error(body.error);
 
     return body;
   } catch (error: any) {

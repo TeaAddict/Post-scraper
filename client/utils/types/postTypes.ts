@@ -14,13 +14,13 @@ export type Post = {
   blacklisted: number;
   websiteCreatedAtDatetime: Date;
   websiteCreatedAtString: string;
-  id: number;
 };
 
 export type FullPost = Post & {
   createdAt: string;
   updatedAt: string;
   userId: number;
+  id: number;
 };
 
 // websiteCreatedAtDatetime: Date;

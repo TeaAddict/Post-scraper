@@ -72,8 +72,8 @@ export async function getPostByUserId(
 
     const filteredPosts = posts.filter((post) => {
       if (
-        (settings.appliedFilter && post.applied) ||
-        (settings.blacklistedFilter && post.blacklisted)
+        (settings.applied_filter && post.applied) ||
+        (settings.blacklisted_filter && post.blacklisted)
       ) {
         return;
       } else {

@@ -8,12 +8,49 @@ import {
   Remote,
 } from "../../Types/settingsTypes";
 import { formatLinkedinUrlSettings } from "./formatLinkedinUrlSettings";
+import { Page } from "puppeteer";
+import {
+  clickSeeMore,
+  getLinkedinPostsFromPage,
+  getMaxPostCount,
+  postsExist,
+} from "./getLinkedinPostsFromPage";
+
+type ScrapePost = {
+  title: string;
+  link: string;
+  location: string;
+  companyName: string;
+  websiteCreatedAtDatetime: string;
+  websiteCreatedAtString: string;
+  ageInDays: number;
+  keywords: string;
+  applied: boolean;
+  blacklisted: boolean;
+};
+
+async function scrollDownPageHeight(page: Page) {
+  const previousHeight = (await page.evaluate(
+    "document.body.scrollHeight"
+  )) as number;
+  await page.evaluate("window.scrollTo(0, document.body.scrollHeight)");
+  await page.waitForFunction(`document.body.scrollHeight > ${previousHeight}`);
+  return previousHeight;
+}
+async function scrollUpPageHeight(page: Page) {
+  const previousHeight = (await page.evaluate(
+    "document.body.scrollHeight"
+  )) as number;
+  await page.evaluate("window.scrollTo(0, 0)");
+  await page.waitForFunction(`document.body.scrollHeight === 0`);
+  return previousHeight;
+}
 
 // If returns: error or []   it probably means that linkedin is BLOCKING, code is fine. Just send request again.
 export async function getLinkedinPosts(
   keywords: string,
   location: string,
-  pages: number = 1,
+  postNumber: number,
   settings: {
     age: PostAge;
     jobType: JobType;
@@ -47,72 +84,57 @@ export async function getLinkedinPosts(
       .launch({ headless: false });
 
     const page = await browser.newPage();
+    page.setDefaultNavigationTimeout(60000);
+    await page.setViewport({
+      width: 1200,
+      height: 800,
+    });
+
     await page.goto(cleanUrl);
 
-    const jobPosts = await page.evaluate(
-      (cleanUrl, keywords) => {
-        const couldNotFind = document
-          .querySelector("h1.core-section-container__main-title.main-title")
-          ?.textContent?.trim();
-        const spelledIncorrectly = document
-          .querySelector("p.no-results__subheading")
-          ?.textContent?.trim();
+    const exist = await postsExist(page);
+    if (!exist) return "no results";
 
-        if (couldNotFind || spelledIncorrectly) return "no results";
+    const maxPosts = await getMaxPostCount(page);
 
-        const posts = Array.from(
-          document.querySelectorAll("div.job-search-card")
-        );
-        const res = posts.map((val) => {
-          const innerDiv = val.querySelector("div.base-search-card__info");
-          return {
-            title:
-              val
-                .querySelector("div.base-search-card__info h3")
-                ?.textContent?.trim() ?? "",
-            link:
-              val
-                .querySelector("a.base-card__full-link")
-                ?.getAttribute("href") ?? "",
-            location:
-              innerDiv
-                ?.querySelector("div.base-search-card__metadata span")
-                ?.textContent?.trim() ?? "",
-            companyName:
-              innerDiv?.querySelector("h4 a")?.textContent?.trim() ?? "",
-            websiteCreatedAtDatetime:
-              innerDiv
-                ?.querySelector("div.base-search-card__metadata time")
-                ?.getAttribute("datetime") ?? "",
-            websiteCreatedAtString:
-              innerDiv
-                ?.querySelector("div.base-search-card__metadata time")
-                ?.textContent?.trim() ?? "",
-            ageInDays: 0,
-            keywords,
-            applied: false,
-            blacklisted: false,
-          };
-        });
+    let jobPosts: ScrapePost[] | "no results" = [];
+    while (jobPosts.length < postNumber && jobPosts.length < maxPosts) {
+      const newPosts = await getLinkedinPostsFromPage(page, cleanUrl, keywords);
 
-        return res;
-      },
-      cleanUrl,
-      keywords
-    );
+      if (newPosts.length === maxPosts) {
+        jobPosts = newPosts;
+        break;
+      }
 
-    if (jobPosts === "no results") return "no results";
+      console.log("Desired post num:", postNumber);
+      console.log("Max Post length:", maxPosts);
+      console.log("New post length:", newPosts.length);
+      console.log("Post length:", jobPosts.length);
+
+      if (newPosts.length === jobPosts.length) scrollUpPageHeight(page);
+
+      jobPosts = newPosts;
+
+      await clickSeeMore(page);
+      await sleep(2000);
+      scrollDownPageHeight(page);
+      await sleep(2000);
+    }
 
     if (!jobPosts.length) return;
 
-    await browser.close();
+    try {
+      await browser.close();
+    } catch (error) {
+      console.log("Browser is already closed");
+    }
 
     const jobPostsWithAge = jobPosts.map((post) => {
       post.ageInDays = getAgeInDays(post.websiteCreatedAtDatetime ?? "");
       return post;
     });
 
-    return jobPostsWithAge;
+    return { posts: jobPostsWithAge, maxPosts };
   } catch (error) {
     console.log(error);
   }
@@ -127,7 +149,7 @@ export async function getWebsitePosts(
     experienceLevel: ExperienceLevel;
     remote: Remote;
   },
-  pages: number = 1,
+  postNumber: number,
   retries: number = 5,
   sleepDuration: number = 10
 ) {
@@ -137,7 +159,7 @@ export async function getWebsitePosts(
       const posts = await getLinkedinPosts(
         keywords,
         location,
-        pages,
+        postNumber,
         linkedinSettings
       );
 
@@ -145,12 +167,12 @@ export async function getWebsitePosts(
         return;
       } else if (posts === "no results") {
         console.log("Could not find posts");
-        return;
-      } else if (posts === undefined || !posts.length) {
+        return "no results";
+      } else if (posts === undefined || !posts.posts.length) {
         console.log("Empty arr, send request again in 5 seconds");
         await sleep(sleepDuration * 1000);
       } else {
-        return posts;
+        return { posts: posts.posts, maxPosts: posts.maxPosts };
       }
     }
   } catch (error) {

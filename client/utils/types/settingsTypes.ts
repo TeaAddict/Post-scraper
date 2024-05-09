@@ -1,3 +1,16 @@
+export type Settings = {
+  appliedFilter: number;
+  blacklistedFilter: number;
+  getPostCount: number;
+};
+
+export type FullSettings = Settings & {
+  createdAt: Date;
+  id: number;
+  updatedAt: Date;
+  userId: number;
+};
+
 export type PostAge = {
   id: number;
   age: string;

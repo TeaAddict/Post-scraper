@@ -1,3 +1,6 @@
+import { objectSnakeToCamel } from "@/utils/helpers";
+import { Post } from "@/utils/types/postTypes";
+
 type Data = {
   keyword: string;
   location?: string;
@@ -39,10 +42,17 @@ export async function getNewPosts({ keyword, location }: Data) {
         location,
       }),
     });
-    const resBody = await res.json();
-    if (res.status >= 400) throw new Error(resBody.error);
+    const resBody:
+      | { maxPosts: number; cleanPosts: Post[] }
+      | { error: string } = await res.json();
 
-    return resBody;
+    if ("error" in resBody) throw new Error(resBody.error);
+
+    const camelCasedPosts = resBody.cleanPosts.map((post) =>
+      objectSnakeToCamel(post)
+    );
+
+    return { maxPosts: resBody.maxPosts, posts: camelCasedPosts };
   } catch (error: any) {
     throw new Error(error);
   }

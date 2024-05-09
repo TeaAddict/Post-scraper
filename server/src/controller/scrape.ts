@@ -6,13 +6,18 @@ import { filterPosts } from "../utils/filterByTitle";
 import { TEST_DATA1 } from "../contants";
 import { objKeysCamelToSnake } from "../helper/helpers";
 import { Post } from "../Types/postTypes";
-import { sqlGetAllLinkedinSettings } from "../db/settings/settingsActions";
+import {
+  sqlGetAllLinkedinSettings,
+  sqlGetSettingsByUserId,
+} from "../db/settings/settingsActions";
 import { getWebsitePosts } from "../helper/scraping/getLinkedinPosts";
 import { formatLinkedinSettings } from "../helper/scraping/formatLinkedinSettings";
 
 export async function getPosts(req: express.Request, res: express.Response) {
   try {
     const MAX_AGE_IN_DAYS = 30;
+    const POST_NUMBER = 50;
+
     const { userId } = res.locals;
     let { keyword, location } = req.body;
     if (!keyword) return res.status(400).json({ error: "Requires a keyword" });
@@ -20,6 +25,13 @@ export async function getPosts(req: express.Request, res: express.Response) {
 
     const user = await sqlGetUserById(userId);
     if (!user) return res.status(400).json({ error: "User does not exist" });
+
+    const generalSettings = await sqlGetSettingsByUserId(userId);
+    if (!generalSettings)
+      return res
+        .status(400)
+        .json({ error: "Problem getting general settings" });
+    const { get_post_count: getPostCount } = generalSettings;
 
     const blacklistedKeywords = await sqlGetKeywords(user.id);
     if (!blacklistedKeywords)
@@ -34,16 +46,20 @@ export async function getPosts(req: express.Request, res: express.Response) {
 
     const linkedinSettingsClean = formatLinkedinSettings(linkedinSettings);
 
-    const unfilteredPosts = await getWebsitePosts(
+    const scrapeRes = await getWebsitePosts(
       keyword,
       location,
-      linkedinSettingsClean
+      linkedinSettingsClean,
+      getPostCount
     );
 
-    if (!unfilteredPosts)
+    if (scrapeRes === "no results")
+      return res.status(200).json({ message: "no results" });
+
+    if (!scrapeRes)
       return res.status(400).json({ error: "Problem with scraper" });
 
-    const snakeCased = unfilteredPosts.map((val) =>
+    const snakeCased = scrapeRes.posts.map((val) =>
       objKeysCamelToSnake(val)
     ) as unknown as Post[];
 
@@ -54,7 +70,7 @@ export async function getPosts(req: express.Request, res: express.Response) {
       if (!res) sqlCreatePost(userId, post);
     });
 
-    return res.status(200).json(cleanPosts);
+    return res.status(200).json({ maxPosts: scrapeRes.maxPosts, cleanPosts });
   } catch (error) {
     console.log(error);
     return res.status(400).json({ error: "Problem with getting posts" });

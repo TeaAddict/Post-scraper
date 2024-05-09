@@ -5,7 +5,7 @@ import TableCheckBox from "./TableCheckbox";
 import { Post } from "@/utils/types/postTypes";
 import { IoMdClose } from "react-icons/io";
 import { useDeletePost } from "@/hooks/usePosts";
-import LinkButton from "./linkButton";
+import LinkButton from "./LinkButton";
 
 const PostTable = ({ data }: { data: Post[] }) => {
   const deleteMutation = useDeletePost();

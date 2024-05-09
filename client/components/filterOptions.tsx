@@ -1,16 +1,22 @@
 import React from "react";
-import { CheckboxWLabel } from "./shared/checkboxWLabel";
+import { CheckboxWLabel } from "./shared/CheckboxWLabel";
 import { useSettings, useSettingsMutation } from "@/hooks/useSettings";
+import { Settings } from "@/utils/types/settingsTypes";
 
 const FilterOptions = () => {
   const settingsMutation = useSettingsMutation();
   const { data, isLoading } = useSettings();
+  const partialSettings: Settings = {
+    appliedFilter: data?.appliedFilter ?? 0,
+    blacklistedFilter: data?.blacklistedFilter ?? 0,
+    getPostCount: data?.getPostCount ?? 0,
+  };
 
   const appliedFilter = data?.appliedFilter === 1;
   const blacklistedFilter = data?.blacklistedFilter === 1;
 
   function onClick(id: string, isChecked: boolean) {
-    let settings = { [id]: isChecked };
+    let settings: Settings = { ...partialSettings, [id]: isChecked };
     settingsMutation.mutate(settings);
   }
 

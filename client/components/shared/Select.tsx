@@ -89,7 +89,7 @@ const Select = ({
       ref={ref}
     >
       <label
-        className={`flex justify-center w-full h-full cursor-pointer`}
+        className={`flex justify-center items-center w-full h-full cursor-pointer`}
         onClick={() => isOpen && handleSave()}
       >
         {isOpen ? "Save" : label}
