@@ -54,6 +54,9 @@ export async function getPosts(req: express.Request, res: express.Response) {
     if (scrapeRes === "no results")
       return res.status(200).json({ message: "no results" });
 
+    if (scrapeRes === "hide ip")
+      return res.status(200).json({ message: "hide ip" });
+
     if (!scrapeRes)
       return res.status(400).json({ error: "Problem with scraper" });
 

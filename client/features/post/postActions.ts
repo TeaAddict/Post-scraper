@@ -48,6 +48,10 @@ export async function getNewPosts({ keyword, location }: Data) {
 
     if ("error" in resBody) throw new Error(resBody.error);
 
+    if ("message" in resBody) {
+      return resBody.message;
+    }
+
     const camelCasedPosts = resBody.cleanPosts.map((post) =>
       objectSnakeToCamel(post)
     );

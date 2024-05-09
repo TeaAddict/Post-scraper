@@ -160,12 +160,11 @@ export async function getWebsitePosts(
       );
 
       if (posts === "hide ip") {
-        return;
+        return "hide ip";
       } else if (posts === "no results") {
-        console.log("Could not find posts");
         return "no results";
       } else if (posts === undefined || !posts.posts.length) {
-        console.log("Empty arr, send request again in 5 seconds");
+        console.log("Empty arr, send request again in few seconds");
         await sleep(sleepDuration * 1000);
       } else {
         return { posts: posts.posts, maxPosts: posts.maxPosts };

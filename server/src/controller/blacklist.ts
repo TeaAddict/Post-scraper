@@ -25,25 +25,6 @@ export async function getKeywords(req: express.Request, res: express.Response) {
   }
 }
 
-// export async function getKeyword(req: express.Request, res: express.Response) {
-//   try {
-//     const { keyword } = req.body;
-//     if (!keyword)
-//       return res
-//         .status(400)
-//         .json({ error: "Required field 'keyword' is missing" });
-
-//     const resKeyword = await sqlGetKeyword(keyword);
-//     if (!resKeyword)
-//       return res.status(400).json({ error: "Keyword does not exist" });
-
-//     return res.status(201).json(resKeyword);
-//   } catch (error) {
-//     console.log(error);
-//     return res.status(400).json({ error: "Problem with getting keyword" });
-//   }
-// }
-
 export async function addToBlacklist(
   req: express.Request,
   res: express.Response

@@ -21,8 +21,7 @@ export const useGetNewPosts = () => {
     onError: (e) => {
       console.log(e.message);
     },
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
   });

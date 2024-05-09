@@ -3,6 +3,7 @@ import Button from "../../components/shared/Button";
 import { ChangeEventHandler, useState } from "react";
 import { useGetNewPosts } from "@/hooks/usePosts";
 import Loader from "@/components/shared/loader/Loader";
+import { Post } from "@/utils/types/postTypes";
 
 function PostSearchBar({
   value,
@@ -19,8 +20,15 @@ function PostSearchBar({
       { keyword: value },
       {
         onSuccess: (data) => {
-          console.log("MUTATION SUCCESS:", data);
-          if (data) setMaxPosts(data.maxPosts);
+          const typedData = data as
+            | { maxPosts: number; posts: Post[] }
+            | string;
+
+          if (typeof typedData === "string") return alert(data);
+          if (typedData.posts.length) setMaxPosts(typedData.maxPosts);
+        },
+        onError: (error) => {
+          console.log(error.message);
         },
       }
     );
