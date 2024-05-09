@@ -3,7 +3,6 @@ import { sqlCreatePost, sqlGetPostByLink } from "../db/post/actions";
 import { sqlGetUserById } from "../db/user/actions";
 import { sqlGetKeywords } from "../db/blacklist/actions";
 import { filterPosts } from "../utils/filterByTitle";
-import { TEST_DATA1 } from "../contants";
 import { objKeysCamelToSnake } from "../helper/helpers";
 import { Post } from "../Types/postTypes";
 import {
@@ -16,7 +15,6 @@ import { formatLinkedinSettings } from "../helper/scraping/formatLinkedinSetting
 export async function getPosts(req: express.Request, res: express.Response) {
   try {
     const MAX_AGE_IN_DAYS = 30;
-    const POST_NUMBER = 50;
 
     const { userId } = res.locals;
     let { keyword, location } = req.body;

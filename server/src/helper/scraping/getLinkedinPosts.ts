@@ -58,6 +58,10 @@ export async function getLinkedinPosts(
     remote: Remote;
   }
 ) {
+  const browser = await puppeteer
+    .use(StealthPlugin())
+    .launch({ headless: true });
+
   try {
     const websiteUrl =
       "https://www.linkedin.com/jobs/search?keywords=javascript&location=Lithuania&geoId=&trk=public_jobs_jobs-search-bar_search-submit&position=1&pageNum=0";
@@ -78,10 +82,6 @@ export async function getLinkedinPosts(
       console.log("Hide ip!");
       return "hide ip";
     }
-
-    const browser = await puppeteer
-      .use(StealthPlugin())
-      .launch({ headless: false });
 
     const page = await browser.newPage();
     page.setDefaultNavigationTimeout(60000);
@@ -123,12 +123,6 @@ export async function getLinkedinPosts(
 
     if (!jobPosts.length) return;
 
-    try {
-      await browser.close();
-    } catch (error) {
-      console.log("Browser is already closed");
-    }
-
     const jobPostsWithAge = jobPosts.map((post) => {
       post.ageInDays = getAgeInDays(post.websiteCreatedAtDatetime ?? "");
       return post;
@@ -137,6 +131,8 @@ export async function getLinkedinPosts(
     return { posts: jobPostsWithAge, maxPosts };
   } catch (error) {
     console.log(error);
+  } finally {
+    await browser.close();
   }
 }
 
