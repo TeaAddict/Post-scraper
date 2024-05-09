@@ -9,11 +9,13 @@ import LogoutButton from "@/components/LogoutButton";
 import { usePosts } from "@/hooks/usePosts";
 import Settings from "../settings/Settings";
 import { objectSnakeToCamel } from "@/utils/helpers";
+import { useBlacklist } from "@/hooks/useBlacklist";
 
 const ClientPostsPage = () => {
   const [searchVal, setSearchVal] = useState("");
   const query = usePosts();
   const data = (query.data as FullPost[]) ?? [];
+  const blacklist = useBlacklist();
 
   const camelCasedData = data.map(
     (val: FullPost) => objectSnakeToCamel(val) as FullPost
@@ -23,7 +25,14 @@ const ClientPostsPage = () => {
     if (!searchVal || post.keywords.includes(searchVal)) return post;
   });
 
-  const cleanData = filteredDataByKeyword.map((val) => {
+  const filteredByBlacklist = filteredDataByKeyword.filter(
+    (post) =>
+      !blacklist.data.some((val: { keyword: string }) =>
+        post.title.toLocaleLowerCase().includes(val.keyword.toLocaleLowerCase())
+      )
+  );
+
+  const cleanData = filteredByBlacklist.map((val) => {
     return {
       ...val,
       websiteCreatedAtDatetime: new Date(val.websiteCreatedAtDatetime),
