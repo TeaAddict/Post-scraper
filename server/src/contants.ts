@@ -4,8 +4,8 @@ export const MAX_AGE = 20;
 export const TABLE_LIST = [
   { name: "user", location: "src/db/user/user.sql" },
   { name: "post", location: "src/db/post/post.sql" },
-  { name: "blacklist", location: "src/db/blacklist/blacklist.sql" },
   { name: "settings", location: "src/db/settings/settings.sql" },
+  { name: "blacklist", location: "src/db/blacklist/blacklist.sql" },
   { name: "postAge", location: "src/db/settings/postAge.sql" },
   { name: "jobType", location: "src/db/settings/jobType.sql" },
   {
