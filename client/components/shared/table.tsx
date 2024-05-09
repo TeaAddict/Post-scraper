@@ -5,6 +5,8 @@ import {
   FC,
   MouseEventHandler,
   SetStateAction,
+  useEffect,
+  useRef,
   useState,
 } from "react";
 
@@ -67,6 +69,7 @@ function sort(data: Body, columnName: string, direction: string) {
 }
 
 const Table = ({ head, body, onClickBody, initSort }: Props) => {
+  const tableRef = useRef<HTMLTableElement>(null);
   const [activeRow, setActiveRow] = useState<Number>();
   const [sortVal, setSortVal] = useState(
     `${initSort}-desc` ?? `${head[0].value}-desc`
@@ -87,9 +90,22 @@ const Table = ({ head, body, onClickBody, initSort }: Props) => {
     setActiveRow(index);
   }
 
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      const targetNode = event.target as Node;
+      if (tableRef.current && !tableRef.current.contains(targetNode)) {
+        setActiveRow(undefined);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [tableRef]);
+
   // Needs w-full h-full on parent containers + overflow-auto,
   return (
-    <table className="text-left text-base">
+    <table className="text-left text-base" ref={tableRef}>
       <thead className="sticky top-0 uppercase">
         <tr className=" border-b-4 border-current">
           {head.map((el) => (

@@ -5,7 +5,9 @@ import React from "react";
 const LinkButton = (data: { cellCol: string; cellVal: string }) => {
   return (
     <Button>
-      <Link href={data.cellVal}>Start applying</Link>
+      <Link href={data.cellVal} target="_blank">
+        Start applying
+      </Link>
     </Button>
   );
 };
