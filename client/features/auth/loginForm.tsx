@@ -23,8 +23,8 @@ const LoginForm = () => {
     formState: { isSubmitting, errors },
   } = useForm({
     defaultValues: {
-      username: "jonas1",
-      password: "jonas1",
+      username: "",
+      password: "",
     },
   });
   const isLoading = isSubmitting;
